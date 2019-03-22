@@ -10,6 +10,6 @@ $factory->define(Like::class, function (Faker $faker) {
         'like' => (bool) random_int(0, 1),
         'created_id' => User::inRandomOrder()->first()->id,
         'post_id' => Post::inRandomOrder()->first()->id,
-        'comment_id' => '',
+        'comment_id' => null,
     ];
 });
