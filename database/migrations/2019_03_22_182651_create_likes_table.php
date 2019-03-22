@@ -18,8 +18,8 @@ class CreateLikesTable extends Migration
             $table->boolean('like');
 
             $table->unsignedBigInteger("created_id")->unsigned();
-            $table->unsignedBigInteger("post_id")->unsigned();
-            $table->unsignedBigInteger("comment_id")->unsigned();
+            $table->unsignedBigInteger("post_id")->unsigned()->nullable();
+            $table->unsignedBigInteger("comment_id")->unsigned()->nullable();
 
             $table->foreign("created_id")->references("id")->on("users");
             $table->foreign("post_id")->references("id")->on("posts");

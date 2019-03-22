@@ -19,7 +19,7 @@ class CreatePostsTable extends Migration
             $table->longText('content');
 
             $table->unsignedBigInteger('created_id')->unsigned();
-            $table->unsignedBigInteger('modified_id')->unsigned();
+            $table->unsignedBigInteger('modified_id')->unsigned()->nullable();
 
             $table->foreign("created_id")->references("id")->on("users");
             $table->foreign("modified_id")->references("id")->on("users");
