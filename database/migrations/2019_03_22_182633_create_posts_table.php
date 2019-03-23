@@ -18,11 +18,11 @@ class CreatePostsTable extends Migration
             $table->string('title', 255);
             $table->longText('content');
 
-            $table->unsignedBigInteger('created_id')->unsigned();
+            $table->unsignedBigInteger('created_id')->unsigned()->nullable();
             $table->unsignedBigInteger('modified_id')->unsigned()->nullable();
 
-            $table->foreign("created_id")->references("id")->on("users");
-            $table->foreign("modified_id")->references("id")->on("users");
+            $table->foreign("created_id")->references("id")->on("users")->onDelete("set null");
+            $table->foreign("modified_id")->references("id")->on("users")->onDelete("set null");
 
             $table->timestamps();
         });
