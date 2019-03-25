@@ -19,10 +19,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/', function () {
-    // return view('pages/home-page');
-    return view('layouts.pages.home');
-});
+Route::get('/', 'PostController@home');
 
 Route::get('/posts/{id}', function () {
     return view('layouts.pages.post');

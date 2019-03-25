@@ -17,6 +17,10 @@ class PostController extends Controller
         return Post::all();
     }
 
+    public function home() {
+        return view('layouts.pages.home', ['posts' => Post::all()]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

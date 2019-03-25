@@ -8,8 +8,19 @@ class Post extends Model
 {
     protected $fillable = [
         'title',
+        'subtitle',
         'content',
         'created_id',
         'modified_id',
     ];
+
+    public function created_by ()
+    {
+        return $this->belongsTo(User::class, 'created_id');
+    }
+
+    public function modified_by ()
+    {
+        return $this->belongsTo(User::class, 'modified_id');
+    }
 }
