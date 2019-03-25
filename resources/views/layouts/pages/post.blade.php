@@ -1,5 +1,13 @@
 @extends('layouts.master.master-page')
 
+@section('header-content')
+	<div class="post-heading">
+		<h1>Man must explore, and this is exploration at its greatest</h1>
+		<h2 class="subheading">Problems look mighty small from 150 miles up</h2>
+		<span class="meta">Posted by <a href="#">Start Bootstrap</a> on August 24, 2019</span>
+	</div>
+@endsection
+
 @section('content')
 	<!-- Post Content -->
 	<article>
