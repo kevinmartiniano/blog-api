@@ -7,8 +7,9 @@ use App\User;
 
 $factory->define(Post::class, function (Faker $faker) {
     return [
-        'title' => Str::random(100),
-        'content' => Str::random(100),
+        'title' => $faker->realText(50),
+        'subtitle' => $faker->realText(50),
+        'content' => $faker->realText(250),
         'created_id' => $user = User::inRandomOrder()->first()->id,
         'modified_id' => $user,
     ];
