@@ -17,7 +17,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware("auth:api")->prefix('v1')->group(function () {
+// Route::middleware("auth:api")->prefix('v1')->group(function () {
+//     Route::resources([
+//         'posts' => 'PostController',
+//         'comments' => 'CommentController',
+//         'likes' => 'LikeController',
+//     ]);
+// });
+
+Route::prefix('v1')->group(function () {
     Route::resources([
         'posts' => 'PostController',
         'comments' => 'CommentController',
