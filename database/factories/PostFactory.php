@@ -9,7 +9,7 @@ $factory->define(Post::class, function (Faker $faker) {
     return [
         'title' => $faker->realText(50),
         'subtitle' => $faker->realText(50),
-        'content' => $faker->realText(250),
+        'content' => $faker->realText(800),
         'created_id' => $user = User::inRandomOrder()->first()->id,
         'modified_id' => $user,
     ];

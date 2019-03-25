@@ -23,4 +23,8 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'modified_id');
     }
+
+    public function comments () {
+        return $this->hasMany(Comment::class, 'parent_id', 'id')->orderBy('created_at', 'desc');
+    }
 }

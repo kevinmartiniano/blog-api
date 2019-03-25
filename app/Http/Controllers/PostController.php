@@ -21,6 +21,11 @@ class PostController extends Controller
         return view('layouts.pages.home', ['posts' => Post::all()]);
     }
 
+    public function details($id) {
+        $post = Post::find($id);
+        return view('layouts.pages.post', ['post' => $post]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
