@@ -56,8 +56,13 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'postmaster@sandboxd84ff060ec6f4c52b6a0098b97bb010e.mailgun.org'),
+        'name' => env('MAIL_FROM_NAME', 'Blog API'),
+    ],
+
+    'reply_to' => [
+        'address' => env('MAIL_FROM_ADDRESS', 'postmaster@sandboxd84ff060ec6f4c52b6a0098b97bb010e.mailgun.org'),
+        'name' => env('MAIL_FROM_NAME', 'Blog API'),
     ],
 
     /*
