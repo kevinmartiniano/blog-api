@@ -18,7 +18,7 @@ class PostController extends Controller
     }
 
     public function home() {
-        return view('layouts.pages.home', ['posts' => Post::all()]);
+        return view('layouts.pages.home', ['posts' => Post::paginate()]);
     }
 
     public function details($id) {

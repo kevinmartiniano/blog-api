@@ -19,13 +19,28 @@
 		<div class="container">
 			<div class="row">
 			<div class="col-lg-8 col-md-10 mx-auto">
-				|<!-- Conteúdo dinâmico -->
+				<!-- Conteúdo dinâmico -->
 				{{ $post->content }}
 
 				<hr />
 
+				<p>
+					<h3>
+						Comments
+					</h3>
+				</p>
+
+				<hr />
+
 				@foreach ($post->comments as $comment)
-					<span class="subheading">{{ $comment->created_by->name }}</span>
+					<div class="post-preview">
+						<h5>
+							{{ $comment->content }}
+						</h3>
+						<p class="post-meta">
+							Posted by <span class="subheading">{{ $comment->created_by->name }}</span> on {{ $comment->created_at->format('F d, Y') }}
+						</p>
+					</div>
 					<hr />
 				@endforeach
 

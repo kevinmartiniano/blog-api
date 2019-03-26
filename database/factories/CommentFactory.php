@@ -8,7 +8,7 @@ use App\Post;
 
 $factory->define(Comment::class, function (Faker $faker) {
     return [
-        'content' => Str::random(255),
+        'content' => $faker->realText(100),
         'created_id' => User::inRandomOrder()->first()->id,
         'parent_id' => Post::inRandomOrder()->first()->id,
     ];
