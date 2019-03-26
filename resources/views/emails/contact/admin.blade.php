@@ -12,16 +12,16 @@
 <hr />
 
 <p>
-	O leitor {{ $contact->name }} entrou em contato pelo formulário do site.
+	O leitor {{ $contactName }} entrou em contato pelo formulário do site.
 </p>
 
 <hr />
 
 <p>
-	Telefone para contato: {{ $contact->phone_number }}
+	Telefone para contato: {{ $contactPhoneNumber }}
 </p>
 <p>
-	Email para contato: {{ $contact->email }}
+	Email para contato: {{ $contactEmail }}
 </p>
 
 <hr />
@@ -31,5 +31,5 @@
 </p>
 
 <p>
-	{{ $contact->message }}
+	{{ $contactMessage }}
 </p>

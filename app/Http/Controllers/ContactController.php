@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Contact;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\User;
+use App\Mail\ContactMe;
+use PHPUnit\Framework\Constraint\Exception;
 
 class ContactController extends Controller
 {
@@ -35,7 +39,9 @@ class ContactController extends Controller
      */
     public function store(Request $request, Contact $contact)
     {
-        return $contact->create($request->all());
+        $contact->create($request->all());
+
+        Mail::to(User::where('email', '=', 'kevin.martiniano123@gmail.com')->first())->send(new ContactMe($contact));
     }
 
     /**
