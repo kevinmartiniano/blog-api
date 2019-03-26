@@ -24,6 +24,11 @@
 
 				<hr />
 
+				@foreach ($post->comments as $comment)
+					<span class="subheading">{{ $comment->created_by->name }}</span>
+					<hr />
+				@endforeach
+
 				<p>Placeholder text by
 				<a href="http://spaceipsum.com/">Space Ipsum</a>. Photographs by
 				<a href="https://www.flickr.com/photos/nasacommons/">NASA on The Commons</a>.</p>

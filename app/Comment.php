@@ -11,4 +11,9 @@ class Comment extends Model
         'created_id',
         'parent_id',
     ];
+
+    public function created_by ()
+    {
+        return $this->belongsTo(User::class, 'created_id');
+    }
 }
