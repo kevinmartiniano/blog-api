@@ -32,3 +32,7 @@ Route::prefix('v1')->group(function () {
         'likes' => 'LikeController',
     ]);
 });
+
+Route::prefix('v1')->group(function () {
+    Route::post('contact', 'ContactController@store');
+});
