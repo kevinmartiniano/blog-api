@@ -37,11 +37,12 @@ class ContactController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Contact $contact)
+    public function store(Request $request)
     {
-        $contact->create($request->all());
+        $contact = new Contact($request->all());
+        $contact->save();
 
-        Mail::to(User::where('email', '=', 'kevin.martiniano123@gmail.com')->first())->send(new ContactMe($contact));
+        Mail::to(User::where('email', '=', env('MAIL_TO_TEST'))->first())->send(new ContactMe($contact));
     }
 
     /**

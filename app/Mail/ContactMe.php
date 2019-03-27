@@ -7,8 +7,9 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Config;
-use App\Contact;
+
 use PHPUnit\Framework\Exception;
+use App\Contact;
 
 class ContactMe extends Mailable
 {
@@ -33,12 +34,11 @@ class ContactMe extends Mailable
      */
     public function build()
     {
-        // return $this->view('view.name');
         return $this->from(Config::get('mail.from.address'), Config::get('mail.from.name'))->view('emails.contact.admin')->with([
             'contactName' => $this->contact->name,
             'contactPhoneNumber' => $this->contact->phone_number,
             'contactEmail' => $this->contact->email,
-            'contactMessage' => $this->contact->message,
+            'contactMessage' => htmlspecialchars($this->contact->message),
         ]);
     }
 }
