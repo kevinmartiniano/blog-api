@@ -38,7 +38,7 @@ class ContactMe extends Mailable
             'contactName' => $this->contact->name,
             'contactPhoneNumber' => $this->contact->phone_number,
             'contactEmail' => $this->contact->email,
-            'contactMessage' => htmlspecialchars($this->contact->message),
+            'contactMessage' => $this->contact->message,
         ]);
     }
 }
