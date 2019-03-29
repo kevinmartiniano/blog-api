@@ -35,6 +35,7 @@
       </div>
     </div>
   </footer>
+  </div>
 
   <!-- Bootstrap core JavaScript -->
   <script src="/vendor/jquery/jquery.min.js"></script>
@@ -42,7 +43,6 @@
 
   <!-- Custom scripts for this template -->
   <script src="/js/clean-blog.min.js"></script>
-
 </body>
 
 </html>

@@ -2,8 +2,8 @@
 
 @section('header-content')
     <div class="site-heading">
-        <h1>Clean Blog</h1>
-        <span class="subheading">A Blog Theme by Start Bootstrap</span>
+        <h1>{{ env('APP_NAME', 'Blog') }}</h1>
+        <span class="subheading">{{ env('APP_DESCRIPTION', 'My Blog') }}</span>
     </div>
 @endsection
 
