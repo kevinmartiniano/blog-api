@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\User;
 use App\Mail\ContactMe;
-use PHPUnit\Framework\Constraint\Exception;
-use function GuzzleHttp\json_encode;
 
 class ContactController extends Controller
 {
