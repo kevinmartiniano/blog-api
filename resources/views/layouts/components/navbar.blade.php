@@ -15,11 +15,30 @@
                     <a class="nav-link" href="/about/">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/posts/1">Sample Post</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="/contact/">Contact</a>
                 </li>
+                <!-- Authentication Links -->
+                @guest
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                </li>
+                @if (Route::has('register'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                    </li>
+                @endif
+                @else
+                    <li class="nav-item">
+                        <a id="nav-link" class="nav-link" href="/users/{{ Auth::user()->id }}">My profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </li>
+                    </li>
+                @endguest
             </ul>
         </div>
     </div>
