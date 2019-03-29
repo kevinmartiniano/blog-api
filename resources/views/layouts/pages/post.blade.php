@@ -1,16 +1,13 @@
 @extends('layouts.master.master-page')
 
 @section('header-content')
-	<div class="post-heading">
-		
-		<h1>
-			{{ $post->title }}
-		</h1>
-		<h2 class="subheading">
-			{{ $post->subtitle }}
-		</h2>
-		<span class="meta">Posted by <a href="/users/{{ $post->created_by->id }}">{{ $post->created_by->name }}</a> on {{ $post->created_at->format('F d, Y') }}</span>
-	</div>
+	<header-posts
+	 title="{{ $post->title }}"
+	 subtitle="{{ $post->subtitle }}"
+	 user_id="{{ $post->created_by->id }}"
+	 user_name="{{ $post->created_by->name }}"
+	 created_at="{{ $post->created_at->format('F d, Y') }}">
+	</header-posts>
 @endsection
 
 @section('content')
