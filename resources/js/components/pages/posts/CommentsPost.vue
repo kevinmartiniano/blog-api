@@ -8,7 +8,7 @@
 
 		<hr />
 
-		<form v-on:submit.prevent="sendComment">
+		<form v-on:submit.prevent="sendComment" v-if="user_id != ''">
 			<div class="control-group">
 				<div class="form-group floating-label-form-group controls">
 					<label>Comment</label>
@@ -52,7 +52,8 @@
 		},
 
 		props: [
-			'comments'
+			'comments',
+			'user_id'
 		],
 
 		ready() {
@@ -60,7 +61,7 @@
 		},
 
 		mounted() {
-			//
+			console.log(this.user_id);
 		},
 
 		methods: {
@@ -73,7 +74,7 @@
 					created_id: this.formComment.created_id,
 					parent_id: this.formComment.parent_id
 				}).then(function(resp) {
-					console.log(resp);
+					location.reload();
 				}).catch(function(e) {
 					console.log(e);
 				});
@@ -85,7 +86,7 @@
 
 			// TODO: get real user
 			setCreatedId() {
-				this.formComment.created_id = 1;
+				this.formComment.created_id = parseInt(this.user_id);
 			},
 		},
 	}

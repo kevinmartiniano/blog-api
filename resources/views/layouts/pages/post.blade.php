@@ -45,7 +45,11 @@
 					</div>
 					-->
 
-					<comments-post :comments="{{ $post->comments }}"></comments-post>
+					@guest
+						<comments-post :comments="{{ $post->comments }}" user_id=""></comments-post>
+					@else
+						<comments-post :comments="{{ $post->comments }}" user_id="{{ Auth::user()->id }}"></comments-post>
+					@endguest
 
 					<p>Placeholder text by
 					<a href="http://spaceipsum.com/">Space Ipsum</a>. Photographs by

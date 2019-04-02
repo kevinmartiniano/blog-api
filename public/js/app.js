@@ -1931,27 +1931,22 @@ __webpack_require__.r(__webpack_exports__);
       }]
     };
   },
-  props: ['comments'],
-  ready: function ready() {// this.getComments();
+  props: ['comments', 'user_id'],
+  ready: function ready() {//
   },
-  mounted: function mounted() {// this.getComments();
+  mounted: function mounted() {
+    console.log(this.user_id);
   },
   methods: {
-    // getComments() {
-    // 	console.log(this.comments);
-    // },
     sendComment: function sendComment() {
       this.setParentId();
       this.setCreatedId();
-      console.log(this.formComment.comment);
-      console.log(this.formComment.created_id);
-      console.log(this.formComment.parent_id);
       axios.post('/api/v1/comments/', {
         content: this.formComment.comment,
         created_id: this.formComment.created_id,
         parent_id: this.formComment.parent_id
       }).then(function (resp) {
-        console.log(resp);
+        location.reload();
       }).catch(function (e) {
         console.log(e);
       });
@@ -1961,7 +1956,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     // TODO: get real user
     setCreatedId: function setCreatedId() {
-      this.formComment.created_id = 1;
+      this.formComment.created_id = parseInt(this.user_id);
     }
   }
 });
@@ -38866,66 +38861,74 @@ var render = function() {
       _vm._v(" "),
       _c("hr"),
       _vm._v(" "),
-      _c(
-        "form",
-        {
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.sendComment($event)
-            }
-          }
-        },
-        [
-          _c("div", { staticClass: "control-group" }, [
-            _c(
-              "div",
-              { staticClass: "form-group floating-label-form-group controls" },
-              [
-                _c("label", [_vm._v("Comment")]),
-                _vm._v(" "),
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.formComment.comment,
-                      expression: "formComment.comment"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    rows: "5",
-                    placeholder: "Comment",
-                    id: "comment",
-                    name: "comment",
-                    required: "",
-                    "data-validation-required-message":
-                      "Please enter a comment."
+      _vm.user_id != ""
+        ? _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.sendComment($event)
+                }
+              }
+            },
+            [
+              _c("div", { staticClass: "control-group" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "form-group floating-label-form-group controls"
                   },
-                  domProps: { value: _vm.formComment.comment },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+                  [
+                    _c("label", [_vm._v("Comment")]),
+                    _vm._v(" "),
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.formComment.comment,
+                          expression: "formComment.comment"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        rows: "5",
+                        placeholder: "Comment",
+                        id: "comment",
+                        name: "comment",
+                        required: "",
+                        "data-validation-required-message":
+                          "Please enter a comment."
+                      },
+                      domProps: { value: _vm.formComment.comment },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.formComment,
+                            "comment",
+                            $event.target.value
+                          )
+                        }
                       }
-                      _vm.$set(_vm.formComment, "comment", $event.target.value)
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c("p", { staticClass: "help-block text-danger" })
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("br"),
-          _vm._v(" "),
-          _c("div", { attrs: { id: "success" } }),
-          _vm._v(" "),
-          _vm._m(0)
-        ]
-      ),
+                    }),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "help-block text-danger" })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("div", { attrs: { id: "success" } }),
+              _vm._v(" "),
+              _vm._m(0)
+            ]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c("hr"),
       _vm._v(" "),
