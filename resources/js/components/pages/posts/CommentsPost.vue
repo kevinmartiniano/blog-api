@@ -43,7 +43,11 @@
 	export default {
 		data() {
 			return {
-				formComment: [],
+				formComment: [{
+					content: '',
+					created_id: '',
+					parent_id: '',
+				},],
 			};
 		},
 
@@ -52,20 +56,36 @@
 		],
 
 		ready() {
-			this.getComments();
+			//
 		},
 
 		mounted() {
-			this.getComments();
+			//
 		},
 
 		methods: {
-			getComments() {
-				console.log(this.comments);
+			sendComment() {
+				this.setParentId();
+				this.setCreatedId();
+
+				axios.post('/api/v1/comments/', {
+					content: this.formComment.comment,
+					created_id: this.formComment.created_id,
+					parent_id: this.formComment.parent_id
+				}).then(function(resp) {
+					console.log(resp);
+				}).catch(function(e) {
+					console.log(e);
+				});
 			},
 
-			sendComment() {
-				console.log(this.formComment);
+			setParentId() {
+				this.formComment.parent_id = parseInt(window.location.pathname.split('/')[2]);
+			},
+
+			// TODO: get real user
+			setCreatedId() {
+				this.formComment.created_id = 1;
 			},
 		},
 	}
