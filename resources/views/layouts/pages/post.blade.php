@@ -21,30 +21,6 @@
 
 					<hr />
 
-					<!--
-					<div>
-						<p>
-							<h3>
-								Comments
-							</h3>
-						</p>
-
-						<hr />
-
-						@foreach ($post->comments as $comment)
-							<div class="post-preview">
-								<h5>
-									{{ $comment->content }}
-								</h5>
-								<p class="post-meta">
-									Posted by <span class="subheading">{{ $comment->created_by->name }}</span> on {{ $comment->created_at->format('F d, Y') }}
-								</p>
-							</div>
-							<hr />
-						@endforeach
-					</div>
-					-->
-
 					@guest
 						<comments-post :comments="{{ $post->comments }}" user_id=""></comments-post>
 					@else
