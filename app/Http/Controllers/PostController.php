@@ -23,6 +23,7 @@ class PostController extends Controller
 
     public function details($id) {
         $post = Post::find($id);
+
         return view('layouts.pages.post', ['post' => $post]);
     }
 
@@ -33,7 +34,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('layouts.pages.create_post');
     }
 
     /**
@@ -44,7 +45,10 @@ class PostController extends Controller
      */
     public function store(Request $request, Post $post)
     {
-        return $post->create($request->all());
+        $data = $request->all();
+        $data['created_id'] = App\Http\Controllers\Auth::user()->id;
+
+        return $post->create($data);
     }
 
     /**

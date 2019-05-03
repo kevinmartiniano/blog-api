@@ -22,6 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', 'PostController@home');
 
 Route::get('/posts/{id}', 'PostController@details');
+Route::get('/admin/posts', 'PostController@create');
 
 Route::get('/about', function () {
     return view('layouts.pages.about');
