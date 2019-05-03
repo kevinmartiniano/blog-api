@@ -2042,7 +2042,7 @@ __webpack_require__.r(__webpack_exports__);
           content: post.content,
           created_id: post.created_id
         }).then(function (response) {
-          window.location.href = window.location.protocol + '//' + window.location.host + '/posts/' + response.data.id;
+          window.location.href = window.location.origin + '/posts/' + response.data.id;
         }).catch(function (error) {
           console.debug(error);
         });
@@ -2126,18 +2126,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       user: []
     };
   },
+  props: ['user_edit', 'user_id'],
   ready: function ready() {//
   },
-  mounted: function mounted() {//
+  mounted: function mounted() {
+    this.setName();
+    this.setEmail();
   },
   methods: {
-    editUser: function editUser() {}
+    setName: function setName() {
+      document.getElementById('txt_name').value = this.user_edit.name;
+    },
+    setEmail: function setEmail() {
+      document.getElementById('txt_email').value = this.user_edit.email;
+    },
+    editUser: function editUser() {
+      var _this = this;
+
+      axios.put('/api/v1/users/' + this.user_edit.id, {
+        name: this.user.name,
+        email: this.user.email,
+        created_id: this.user_id
+      }).then(function (response) {
+        window.location.href = window.location.origin + '/users/' + _this.user_edit.id;
+      }).catch(function (error) {
+        console.debug(error);
+      });
+    }
   }
 });
 
@@ -39628,6 +39657,13 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("p"),
+    _c("h1", [_vm._v("\n\t\t\tEdit user\n\t\t")]),
+    _vm._v(" "),
+    _c("p"),
+    _vm._v(" "),
+    _c("p", [_vm._v("\n\t\tForm to edit user.\n\t")]),
+    _vm._v(" "),
     _c(
       "form",
       {
@@ -39639,46 +39675,7 @@ var render = function() {
         }
       },
       [
-        _c("div", { staticClass: "control-group" }, [
-          _c(
-            "div",
-            { staticClass: "form-group floating-label-form-group controls" },
-            [
-              _c("label", [_vm._v("Name")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.user.title,
-                    expression: "user.title"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  placeholder: "Name",
-                  id: "name",
-                  name: "name",
-                  required: "required",
-                  "data-validation-required-message": "Please enter a name."
-                },
-                domProps: { value: _vm.user.title },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.user, "title", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("p", { staticClass: "help-block text-danger" })
-            ]
-          )
-        ]),
+        _vm._m(0),
         _vm._v(" "),
         _c("div", { staticClass: "control-group" }, [
           _c(
@@ -39700,8 +39697,8 @@ var render = function() {
                 attrs: {
                   type: "text",
                   placeholder: "Email",
-                  id: "email",
-                  name: "email",
+                  id: "txt_email",
+                  name: "txt_email",
                   required: "required",
                   "data-validation-required-message": "Please enter a email."
                 },
@@ -39723,7 +39720,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "success" }),
         _vm._v(" "),
-        _vm._m(0)
+        _vm._m(1)
       ]
     )
   ])
@@ -39733,10 +39730,38 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-group" }, [
+      _c(
+        "div",
+        { staticClass: "form-group floating-label-form-group controls" },
+        [
+          _c("label", [_vm._v("Name")]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              placeholder: "Name",
+              id: "txt_name",
+              name: "txt_name",
+              required: "required",
+              "data-validation-required-message": "Please enter a name."
+            }
+          }),
+          _vm._v(" "),
+          _c("p", { staticClass: "help-block text-danger" })
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-group" }, [
       _c(
         "button",
-        { staticClass: "btn btn-primary", attrs: { id: "createPost" } },
+        { staticClass: "btn btn-primary", attrs: { id: "editUser" } },
         [_vm._v("Send")]
       )
     ])

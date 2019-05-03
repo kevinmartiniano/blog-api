@@ -72,7 +72,7 @@ export default {
 					content: post.content,
 					created_id: post.created_id
 				}).then(response => {
-					window.location.href = window.location.protocol + '//' + window.location.host + '/posts/' + response.data.id;
+					window.location.href = window.location.origin + '/posts/' + response.data.id;
 				}).catch(error => {
 					console.debug(error);
 				});

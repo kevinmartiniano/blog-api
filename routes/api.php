@@ -38,4 +38,6 @@ Route::prefix('v1')->group(function () {
     Route::get('contact', 'ContactController@index');
 
     Route::get('users/{user}', 'UserController@show');
+
+    Route::put('users/{user}', 'AdminUserController@update');
 });
