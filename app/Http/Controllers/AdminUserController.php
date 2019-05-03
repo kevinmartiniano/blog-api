@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class AdminUserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,11 +14,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        //
     }
 
-    public function details(User $user) {
-        return view('layouts.pages.detail_user', ['user' => $user]);
+    public function listUsers() {
+        return view('layouts.pages.list_user', ['users' => User::all()]);
     }
 
     /**
@@ -48,9 +48,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        return $user;
+        //
     }
 
     /**
@@ -59,9 +59,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('layouts.pages.edit_user');
     }
 
     /**
