@@ -60,6 +60,11 @@ Vue.component(
     require('./components/pages/posts/CreatePost.vue').default
 );
 
+Vue.component(
+    'edit-user',
+    require('./components/pages/users/EditUser.vue').default
+);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
