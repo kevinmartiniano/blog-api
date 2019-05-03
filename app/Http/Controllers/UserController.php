@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Post;
+use App\User;
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,17 +14,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::all();
+        return User::all();
     }
 
-    public function home() {
-        return view('layouts.pages.home', ['posts' => Post::paginate()]);
-    }
-
-    public function details($id) {
-        $post = Post::find($id);
-
-        return view('layouts.pages.post', ['post' => $post]);
+    public function details() {
+        return view('layouts.pages.detail_post');
     }
 
     /**
@@ -34,7 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('layouts.pages.create_post');
+        //
     }
 
     /**
@@ -45,29 +39,27 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-
-        return Post::create($data);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Post  $post
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show(User $user)
     {
-        return $post;
+        return $user;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Post  $post
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit($id)
     {
         //
     }
@@ -76,24 +68,22 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Post  $post
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
-        $post->update($request->all());
-
-        return $post;
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Post  $post
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
-        $post->delete();
+        //
     }
 }

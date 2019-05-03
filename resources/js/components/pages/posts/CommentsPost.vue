@@ -32,7 +32,7 @@
 				{{ comment.content }}
 			</h5>
 			<p class="post-meta">
-				Posted by <span class="subheading">{{ comment.created_by.name }}</span> on {{ comment.created_at }}
+				Posted by <span class="subheading" :id="'comment_' +  comment.id" v-bind="setUsername(comment.id, comment.created_id)">{{ comment.created_by }}</span> on {{ comment.created_at }}
 			</p>
 		</div>
 		<hr />
@@ -61,10 +61,18 @@
 		},
 
 		mounted() {
-			console.log(this.user_id);
+			//
 		},
 
 		methods: {
+			setUsername: function(cid, uid) {
+				axios.get('/api/v1/users/' + uid).then(function(resp) {
+					document.getElementById('comment_' + cid).textContent = resp.data.name;
+				}).catch(function(e) {
+					console.log(e);
+				});
+			},
+
 			sendComment() {
 				this.setParentId();
 				this.setCreatedId();

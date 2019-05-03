@@ -36,4 +36,6 @@ Route::prefix('v1')->group(function () {
 Route::prefix('v1')->group(function () {
     Route::post('contact', 'ContactController@store');
     Route::get('contact', 'ContactController@index');
+
+    Route::get('users/{user}', 'UserController@show');
 });

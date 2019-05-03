@@ -28,4 +28,6 @@ Route::get('/about', function () {
     return view('layouts.pages.about');
 });
 
+Route::get('/users/{user}', 'UserController@details');
+
 Route::get('/contact', 'ContactController@create');

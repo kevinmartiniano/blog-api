@@ -59,8 +59,6 @@
 			sendMessage(){
 				var contact = this.contact;
 
-				this.contact = '';
-
 				axios.post('/api/v1/contact/', {
 					name: contact.name,
 					email: contact.email,
