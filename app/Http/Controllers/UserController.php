@@ -17,8 +17,12 @@ class UserController extends Controller
         return User::all();
     }
 
-    public function details() {
-        return view('layouts.pages.detail_post');
+    public function details(User $user) {
+        return view('layouts.pages.detail_user', ['user' => $user]);
+    }
+
+    public function listUsers() {
+        return view('layouts.pages.edit_user', ['users' => User::all()]);
     }
 
     /**

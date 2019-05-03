@@ -29,5 +29,6 @@ Route::get('/about', function () {
 });
 
 Route::get('/users/{user}', 'UserController@details');
+Route::get('/admin/users', 'UserController@listUsers');
 
 Route::get('/contact', 'ContactController@create');
