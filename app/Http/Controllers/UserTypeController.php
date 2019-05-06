@@ -14,7 +14,7 @@ class UserTypeController extends Controller
      */
     public function index()
     {
-        //
+        return UserType::all();
     }
 
     /**
@@ -33,9 +33,11 @@ class UserTypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, UserType $userType)
     {
-        //
+        $userType->create($request->all());
+
+        return $userType;
     }
 
     /**
@@ -46,7 +48,7 @@ class UserTypeController extends Controller
      */
     public function show(UserType $userType)
     {
-        //
+        return $userType;
     }
 
     /**
@@ -69,7 +71,9 @@ class UserTypeController extends Controller
      */
     public function update(Request $request, UserType $userType)
     {
-        //
+        $userType->update($request->all());
+
+        return $userType;
     }
 
     /**
@@ -80,6 +84,6 @@ class UserTypeController extends Controller
      */
     public function destroy(UserType $userType)
     {
-        //
+        $userType->delete();
     }
 }
