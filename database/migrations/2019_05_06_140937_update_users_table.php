@@ -13,10 +13,10 @@ class UpdateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function(Blueprint $table) {
-            $table->unsignedBigInteger('type_user_id')->unsigned()->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->unsignedBigInteger('user_type_id')->unsigned()->nullable();
 
-            $table->foreign('type_user_id')->references("id")->on("users_types")->onDelete("set null");
+            $table->foreign('user_type_id')->references('id')->on('user_types')->onDelete('set null');
         });
     }
 
@@ -27,6 +27,8 @@ class UpdateUsersTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 }
