@@ -14,7 +14,7 @@ class UpdateUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_type_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('user_type_id')->unsigned()->nullable()->default(2);
 
             $table->foreign('user_type_id')->references('id')->on('user_types')->onDelete('set null');
         });
