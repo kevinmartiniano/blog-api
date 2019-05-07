@@ -2164,6 +2164,26 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/oauth/clients').then(function (response) {
         _this.clients = response.data;
+
+        if (_this.clients.length == 0) {
+          _this.createClient();
+        } else {
+          // unccoment
+          // this.getToken();
+          _this.setNewToken();
+        }
+      });
+    },
+    createClient: function createClient() {
+      var _this2 = this;
+
+      axios.post('/oauth/clients', {
+        name: 'user ' + this.user_id,
+        redirect: window.location.origin
+      }).then(function (response) {
+        _this2.getClients();
+      }).catch(function (error) {
+        console.error(error);
       });
     },
 
@@ -2171,12 +2191,14 @@ __webpack_require__.r(__webpack_exports__);
      * Get all of the authorized tokens for the user.
      */
     getToken: function getToken() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('/oauth/personal-access-tokens').then(function (response) {
-        _this2.tokens = response.data[response.data.length - 1];
-
-        _this2.setNewToken();
+        if (response.data.length == 0) {
+          _this3.setNewToken();
+        } else {
+          _this3.tokens = response.data[response.data.length - 1];
+        }
       }).catch(function (error) {
         console.error(error);
       });
@@ -2186,16 +2208,16 @@ __webpack_require__.r(__webpack_exports__);
      * Creating new personal access token for the user.
      */
     setNewToken: function setNewToken() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post('/oauth/personal-access-tokens', {
-        name: this.tokens.name,
+        name: this.clients[this.clients.length - 1].name,
         scopes: []
       }).then(function (response) {
-        _this3.accessToken = response.data.accessToken;
-        _this3.accessTokenId = response.data.token.id;
+        _this4.accessToken = response.data.accessToken;
+        _this4.accessTokenId = response.data.token.id;
 
-        _this3.postForm();
+        _this4.postForm();
       }).catch(function (error) {
         console.error(error);
       });
@@ -2205,7 +2227,7 @@ __webpack_require__.r(__webpack_exports__);
      * Sending informations to update user.
      */
     postForm: function postForm() {
-      var _this4 = this;
+      var _this5 = this;
 
       var user = this.user;
       axios.put('/api/v1/admin/users/' + this.user_edit.id, {
@@ -2218,7 +2240,7 @@ __webpack_require__.r(__webpack_exports__);
           'Accept': "application/json"
         }
       }).then(function (response) {
-        _this4.revoke();
+        _this5.revoke();
       }).catch(function (error) {
         console.debug(error);
       });
@@ -2230,17 +2252,17 @@ __webpack_require__.r(__webpack_exports__);
       document.getElementById('email').value = this.user_edit.email;
     },
     editUser: function editUser() {
-      this.getToken();
+      this.getClients();
     },
 
     /*
      * Deleting last created token.
      */
     revoke: function revoke() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId).then(function (response) {
-        window.location.href = window.location.origin + '/users/' + _this5.user_edit.id;
+        window.location.href = window.location.origin + '/users/' + _this6.user_edit.id;
       }).catch(function (error) {
         console.error(error);
       });

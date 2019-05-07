@@ -68,18 +68,22 @@ export default {
 		getClients() {
 			axios.get('/oauth/clients').then(response => {
 				this.clients = response.data;
+
+				if(this.clients.length == 0) {
+					this.createClient();
+				} else {
+					this.setNewToken();
+				}
 			});
 		},
 
-		/**
-		 * Get all of the authorized tokens for the user.
-		 */
-		getToken() {
-			axios.get('/oauth/personal-access-tokens').then(response => {
-				this.tokens = response.data[response.data.length - 1];
-
-				this.setNewToken();
-    		}).catch(error => {
+		createClient() {
+			axios.post('/oauth/clients', {
+				name: 'user ' + this.user_id,
+				redirect: window.location.origin
+			}).then(response => {
+				this.getClients();
+			}).catch (error => {
 				console.error(error);
 			});
 		},
@@ -89,7 +93,7 @@ export default {
 		 */
 		setNewToken() {
 			axios.post('/oauth/personal-access-tokens', {
-				name: this.tokens.name,
+				name: this.clients[this.clients.length - 1].name,
 				scopes: []
 			}).then(response => {
 				this.accessToken = response.data.accessToken;
@@ -132,7 +136,7 @@ export default {
 		},
 
 		editUser() {
-			this.getToken();
+			this.getClients();
 		},
 
 		/*
