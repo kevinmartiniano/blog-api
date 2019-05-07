@@ -5,7 +5,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 col-md-10 mx-auto">
-					<div>
+					{{-- <div>
 						<table class="table table-hover">
 							<thead>
 								<tr>
@@ -42,7 +42,7 @@
 								@endforeach
 							</tbody>
 						</table>
-					</div>
+					</div> --}}
 				</div>
 			</div>
 		</div>
