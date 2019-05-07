@@ -65,6 +65,11 @@ Vue.component(
     require('./components/pages/users/EditUser.vue').default
 );
 
+Vue.component(
+    'list-users',
+    require('./components/pages/users/ListUsers.vue').default
+);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

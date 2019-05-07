@@ -43,6 +43,7 @@
 							</tbody>
 						</table>
 					</div> --}}
+					<list-users :users="{{ $users }}"></list-users>
 				</div>
 			</div>
 		</div>

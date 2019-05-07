@@ -15,7 +15,7 @@
 					<th scope="row">{{ user.id }}</th>
 					<td>{{ user.name }}</td>
 					<td>{{ user.email }}</td>
-					<td>{{ user.user_type.name }}</td>
+					<td>{{ user.user_type_id }}</td>
 					<td>
 						<a v-bind:href="'/admin/users/' + user.id">
 							<span class="fa-stack fa-md">
@@ -39,10 +39,14 @@
 
 <script>
 export default {
-	data: {
-		return: {
+	data() {
+		return {
 			//
-		},
+		};
 	},
+
+	props: [
+		'users',
+	],
 }
 </script>
