@@ -17,27 +17,33 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::middleware("auth:api")->prefix('v1')->group(function () {
-//     Route::resources([
-//         'posts' => 'PostController',
-//         'comments' => 'CommentController',
-//         'likes' => 'LikeController',
-//     ]);
-// });
-
-Route::prefix('v1')->group(function () {
+Route::middleware("auth:api")->prefix('v1')->group(function () {
     Route::resources([
         'posts' => 'PostController',
         'comments' => 'CommentController',
         'likes' => 'LikeController',
+        'users' => 'UserController',
+        'user-types' => 'UserTypeController',
+        'admin/users' => 'AdminUserController',
     ]);
 });
+
+// Route::prefix('v1')->group(function () {
+//     Route::resources([
+//         'posts' => 'PostController',
+//         'comments' => 'CommentController',
+//         'likes' => 'LikeController',
+//         'users' => 'UserController',
+//         'user-types' => 'UserTypeController',
+//         'admin/users' => 'AdminUserController',
+//     ]);
+// });
 
 Route::prefix('v1')->group(function () {
     Route::post('contact', 'ContactController@store');
     Route::get('contact', 'ContactController@index');
 
-    Route::get('users/{user}', 'UserController@show');
+    // Route::get('users/{user}', 'UserController@show');
 
-    Route::put('users/{user}', 'AdminUserController@update');
+    // Route::put('users/{user}', 'AdminUserController@update');
 });

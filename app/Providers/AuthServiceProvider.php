@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Post;
-use App\Policies\PostPolicy;
+// use App\Policies\PostPolicy;
 
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;

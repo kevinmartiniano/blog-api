@@ -271,6 +271,8 @@
                         .then(response => {
                             this.clients = response.data;
                         });
+
+                console.log(this.clients);
             },
 
             /**
