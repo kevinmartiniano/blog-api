@@ -28,17 +28,6 @@ Route::middleware("auth:api")->prefix('v1')->group(function () {
     ]);
 });
 
-// Route::prefix('v1')->group(function () {
-//     Route::resources([
-//         'posts' => 'PostController',
-//         'comments' => 'CommentController',
-//         'likes' => 'LikeController',
-//         'users' => 'UserController',
-//         'user-types' => 'UserTypeController',
-//         'admin/users' => 'AdminUserController',
-//     ]);
-// });
-
 Route::prefix('v1')->group(function () {
     Route::post('contact', 'ContactController@store');
     Route::get('contact', 'ContactController@index');

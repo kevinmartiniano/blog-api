@@ -2243,7 +2243,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this5 = this;
 
       axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId).then(function (response) {
-        window.location.href = window.location.origin + '/users/' + _this5.user_edit.id;
+        window.location.href = window.location.origin + '/users/' + _this5.user_id;
       }).catch(function (error) {
         console.error(error);
       });
@@ -2303,10 +2303,120 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {//
+    return {
+      accessToken: '',
+      accessTokenId: '',
+      clients: []
     };
   },
-  props: ['users']
+  props: ['users', 'user_id'],
+  ready: function ready() {//
+  },
+  mounted: function mounted() {//
+  },
+  methods: {
+    getUserType: function getUserType(uid, tid) {
+      this.userType = this.requestApi('get', '/api/v1/user-types/' + tid, {}, 'setUserType', {
+        id: uid
+      });
+    },
+    setUserType: function setUserType(user, o) {
+      document.getElementById('type_' + user.id).textContent = o.data.name;
+    },
+    requestApi: function requestApi(method, uri, form, exec, args) {
+      this.getClients(method, uri, form, exec, args);
+    },
+    getClients: function getClients(method, uri, form, exec, args) {
+      var _this = this;
+
+      axios.get('/oauth/clients').then(function (response) {
+        _this.clients = response.data;
+
+        if (_this.clients.length == 0) {
+          _this.createClient(method, uri, form, exec, args);
+        } else {
+          _this.setNewToken(method, uri, form, exec, args);
+        }
+      }).catch(function (err) {
+        if (err.response.status == 401) {
+          window.location.href = window.location.origin;
+        } else {
+          console.error(e);
+        }
+      });
+    },
+    createClient: function createClient(method, uri, form, exec, args) {
+      var _this2 = this;
+
+      axios.post('/oauth/clients', {
+        name: 'user ' + this.user_id,
+        redirect: window.location.origin
+      }).then(function (response) {
+        _this2.getClients(method, uri, form, exec, args);
+      }).catch(function (error) {
+        console.error(error);
+      });
+    },
+
+    /*
+     * Creating new personal access token for the user.
+     */
+    setNewToken: function setNewToken(method, uri, form, exec, args) {
+      var _this3 = this;
+
+      axios.post('/oauth/personal-access-tokens', {
+        name: this.clients[this.clients.length - 1].name,
+        scopes: []
+      }).then(function (response) {
+        _this3.accessToken = response.data.accessToken;
+        _this3.accessTokenId = response.data.token.id;
+
+        _this3.sendRequest(method, uri, form, exec, args);
+      }).catch(function (error) {
+        console.error(error);
+      });
+    },
+    sendRequest: function sendRequest(method, uri, form, exec, args) {
+      var _this4 = this;
+
+      if (method == 'get' || method == 'delete') {
+        axios[method](uri, {
+          headers: {
+            'Authorization': "Bearer " + this.accessToken,
+            'Content-Type': "application/json",
+            'Accept': "application/json"
+          }
+        }).then(function (resp) {
+          _this4.revoke();
+
+          _this4[exec](args, resp);
+        }).catch(function (e) {
+          console.error(e);
+        });
+      } else {
+        axios[method](uri, form, {
+          headers: {
+            'Authorization': "Bearer " + this.accessToken,
+            'Content-Type': "application/json",
+            'Accept': "application/json"
+          }
+        }).then(function (resp) {
+          _this4.revoke();
+
+          _this4[exec](args, resp);
+        }).catch(function (e) {
+          console.error(e);
+        });
+      }
+    },
+
+    /*
+     * Deleting last created token.
+     */
+    revoke: function revoke() {
+      axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId);
+    }
+  }
 });
 
 /***/ }),
@@ -39953,7 +40063,11 @@ var render = function() {
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(user.email))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(user.user_type_id))]),
+            _c("td", [
+              _c("span", { attrs: { id: "type_" + user.id } }, [
+                _vm._v(_vm._s(_vm.getUserType(user.id, user.user_type_id)))
+              ])
+            ]),
             _vm._v(" "),
             _c("td", [
               _c("a", { attrs: { href: "/admin/users/" + user.id } }, [

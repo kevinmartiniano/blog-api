@@ -43,7 +43,11 @@
 							</tbody>
 						</table>
 					</div> --}}
-					<list-users :users="{{ $users }}"></list-users>
+					@guest
+						<list-users :users="{{ $users }}" user_id=""></list-users>
+					@else
+						<list-users :users="{{ $users }}" user_id="{{ Auth::user()->id }}"></list-users>
+					@endguest
 				</div>
 			</div>
 		</div>

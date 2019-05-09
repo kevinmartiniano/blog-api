@@ -144,7 +144,7 @@ export default {
 		 */
 		revoke() {
 			axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId).then(response => {
-				window.location.href = window.location.origin + '/users/' + this.user_edit.id;
+				window.location.href = window.location.origin + '/users/' + this.user_id;
 			}).catch(error => {
 				console.error(error);
 			});
