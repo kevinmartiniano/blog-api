@@ -1,39 +1,53 @@
 <template>
 	<div>
-		<table class="table table-hover">
-			<thead>
-				<tr>
-				<th scope="col">#</th>
-				<th scope="col">Name</th>
-				<th scope="col">Email</th>
-				<th scope="col">User Type</th>
-				<th scope="col">Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="user in users" :key="user.id">
-					<th scope="row">{{ user.id }}</th>
-					<td>{{ user.name }}</td>
-					<td>{{ user.email }}</td>
-					<td><span :id="'type_' + user.id">{{ getUserType(user.id, user.user_type_id) }}</span></td>
-					<td>
-						<a v-bind:href="'/admin/users/' + user.id">
-							<span class="fa-stack fa-md">
-								<i class="fas fa-square fa-stack-2x"></i>
-								<i class="fa fa-edit fa-stack-1x fa-inverse"></i>
-							</span>
-						</a>
+		<div class="row">
+			<div class="col-md-10">
+				<h1>
+					List Users
+				</h1>
+			</div>
+			<div class="col-md-2">
+				<a class="btn btn-primary float-lg-right" href="#" role="button">Create</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+						<th scope="col">#</th>
+						<th scope="col">Name</th>
+						<th scope="col">Email</th>
+						<th scope="col">User Type</th>
+						<th scope="col">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="user in users" :key="user.id">
+							<th scope="row">{{ user.id }}</th>
+							<td>{{ user.name }}</td>
+							<td>{{ user.email }}</td>
+							<td><span :id="'type_' + user.id">{{ getUserType(user.id, user.user_type_id) }}</span></td>
+							<td>
+								<a v-on:click="editUser(user.id)" href="#">
+									<span class="fa-stack fa-md">
+										<i class="fas fa-square fa-stack-2x"></i>
+										<i class="fa fa-edit fa-stack-1x fa-inverse"></i>
+									</span>
+								</a>
 
-						<a href="#">
-							<span class="fa-stack fa-md">
-								<i class="fas fa-square fa-stack-2x"></i>
-								<i class="fas fa-trash-alt fa-stack-1x fa-inverse"></i>
-							</span>
-						</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+								<a v-on:click="delUser(user.id)" href="#">
+									<span class="fa-stack fa-md">
+										<i class="fas fa-square fa-stack-2x"></i>
+										<i class="fas fa-trash-alt fa-stack-1x fa-inverse"></i>
+									</span>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -61,7 +75,15 @@ export default {
 	},
 
 	methods: {
-		getUserType: function(uid, tid) {
+		editUser(uid) {
+			window.location.href = window.location.origin + '/admin/users/' + uid;
+		},
+
+		delUser(uid) {
+			
+		},
+
+		getUserType(uid, tid) {
 			this.userType = this.requestApi('get', '/api/v1/user-types/' + tid, {}, 'setUserType', {
 				id: uid,
 			});
