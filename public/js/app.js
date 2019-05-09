@@ -2315,6 +2315,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2331,6 +2353,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     editUser: function editUser(uid) {
       window.location.href = window.location.origin + '/admin/users/' + uid;
+    },
+    delUser: function delUser(uid) {
+      console.log(uid);
     },
     getUserType: function getUserType(uid, tid) {
       this.userType = this.requestApi('get', '/api/v1/user-types/' + tid, {}, 'setUserType', {
@@ -40106,7 +40131,79 @@ var render = function() {
                     [_vm._m(2, true)]
                   ),
                   _vm._v(" "),
-                  _vm._m(3, true)
+                  _c(
+                    "a",
+                    {
+                      attrs: {
+                        href: "#",
+                        "data-toggle": "modal",
+                        "data-target": "#delConfirm-" + user.id
+                      }
+                    },
+                    [_vm._m(3, true)]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal fade",
+                      attrs: {
+                        id: "delConfirm-" + user.id,
+                        tabindex: "-1",
+                        role: "dialog",
+                        "aria-labelledby": "delConfirmLabel",
+                        "aria-hidden": "true"
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "modal-dialog",
+                          attrs: { role: "document" }
+                        },
+                        [
+                          _c("div", { staticClass: "modal-content" }, [
+                            _vm._m(4, true),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-body" }, [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t\t\tAre you sure you want to delete this user?\n\t\t\t\t\t\t\t\t\t\t"
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-footer" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-secondary",
+                                  attrs: {
+                                    type: "button",
+                                    "data-dismiss": "modal"
+                                  }
+                                },
+                                [_vm._v("Cancel")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.delUser(user.id)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Confirm")]
+                              )
+                            ])
+                          ])
+                        ]
+                      )
+                    ]
+                  )
                 ])
               ])
             }),
@@ -40171,12 +40268,35 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("a", { attrs: { href: "#" } }, [
-      _c("span", { staticClass: "fa-stack fa-md" }, [
-        _c("i", { staticClass: "fas fa-square fa-stack-2x" }),
-        _vm._v(" "),
-        _c("i", { staticClass: "fas fa-trash-alt fa-stack-1x fa-inverse" })
-      ])
+    return _c("span", { staticClass: "fa-stack fa-md" }, [
+      _c("i", { staticClass: "fas fa-square fa-stack-2x" }),
+      _vm._v(" "),
+      _c("i", { staticClass: "fas fa-trash-alt fa-stack-1x fa-inverse" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "'delConfirmLabel" } },
+        [_vm._v("Delete User")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
     ])
   }
 ]

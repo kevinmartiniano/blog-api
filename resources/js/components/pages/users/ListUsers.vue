@@ -36,12 +36,34 @@
 									</span>
 								</a>
 
-								<a v-on:click="delUser(user.id)" href="#">
+								<a href="#" data-toggle="modal" :data-target="'#delConfirm-' + user.id">
 									<span class="fa-stack fa-md">
 										<i class="fas fa-square fa-stack-2x"></i>
 										<i class="fas fa-trash-alt fa-stack-1x fa-inverse"></i>
 									</span>
 								</a>
+
+								<!-- Button trigger modal -->
+								<!-- Modal -->
+								<div class="modal fade" :id="'delConfirm-' + user.id" tabindex="-1" role="dialog" aria-labelledby="delConfirmLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="'delConfirmLabel">Delete User</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												Are you sure you want to delete this user?
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+												<button type="button" class="btn btn-primary" v-on:click="delUser(user.id)">Confirm</button>
+											</div>
+										</div>
+									</div>
+								</div>
 							</td>
 						</tr>
 					</tbody>
@@ -80,11 +102,12 @@ export default {
 		},
 
 		delUser(uid) {
-			
+			console.log(uid);
+			this.requestApi('delete', '/api/v1/user');
 		},
 
 		getUserType(uid, tid) {
-			this.userType = this.requestApi('get', '/api/v1/user-types/' + tid, {}, 'setUserType', {
+			this.requestApi('get', '/api/v1/user-types/' + tid, {}, 'setUserType', {
 				id: uid,
 			});
 		},
