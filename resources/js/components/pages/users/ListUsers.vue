@@ -103,7 +103,11 @@ export default {
 
 		delUser(uid) {
 			console.log(uid);
-			this.requestApi('delete', '/api/v1/user');
+			this.requestApi('delete', '/api/v1/admin/users/' + uid, {}, 'confirmDel', {});
+		},
+
+		confirmDel() {
+			// TODO: refresh the page.
 		},
 
 		getUserType(uid, tid) {

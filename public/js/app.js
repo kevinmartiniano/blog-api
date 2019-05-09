@@ -2356,9 +2356,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     delUser: function delUser(uid) {
       console.log(uid);
+      this.requestApi('delete', '/api/v1/admin/users/' + uid, {}, 'confirmDel', {});
+    },
+    confirmDel: function confirmDel() {// TODO: refresh the page.
     },
     getUserType: function getUserType(uid, tid) {
-      this.userType = this.requestApi('get', '/api/v1/user-types/' + tid, {}, 'setUserType', {
+      this.requestApi('get', '/api/v1/user-types/' + tid, {}, 'setUserType', {
         id: uid
       });
     },
