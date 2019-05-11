@@ -2337,6 +2337,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2344,7 +2383,8 @@ __webpack_require__.r(__webpack_exports__);
       accessTokenId: '',
       clientId: '',
       clientName: '',
-      tokens: []
+      tokens: [],
+      create: {}
     };
   },
   props: ['users', 'user_id'],
@@ -2353,6 +2393,12 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {//
   },
   methods: {
+    clearCreateForm: function clearCreateForm() {
+      $('input[id="name"]').val("");
+      $('input[id="email"]').val("");
+      $('input[id="password"]').val("");
+      $('input[id="confirmPassword"]').val("");
+    },
     editUser: function editUser(uid) {
       window.location.href = window.location.origin + '/admin/users/' + uid;
     },
@@ -40105,12 +40151,227 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._m(0),
+    _c("div", { staticClass: "row" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          attrs: {
+            id: "createUserModal",
+            tabindex: "-1",
+            role: "dialog",
+            "aria-labelledby": "createUserTitle",
+            "aria-hidden": "true"
+          }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "modal-dialog modal-dialog-centered",
+              attrs: { role: "document" }
+            },
+            [
+              _c("div", { staticClass: "modal-content" }, [
+                _vm._m(2),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" }, [
+                  _c("form", [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.create.name,
+                            expression: "create.name"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "name",
+                          "aria-describedby": "nameHelp",
+                          placeholder: "Enter name"
+                        },
+                        domProps: { value: _vm.create.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.create, "name", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "small",
+                        {
+                          staticClass: "form-text text-muted",
+                          attrs: { id: "nameHelp" }
+                        },
+                        [_vm._v("Tipe your name.")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "email" } }, [
+                        _vm._v("Email address")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.create.email,
+                            expression: "create.email"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "email",
+                          id: "email",
+                          "aria-describedby": "emailHelp",
+                          placeholder: "Enter email"
+                        },
+                        domProps: { value: _vm.create.email },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.create, "email", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "small",
+                        {
+                          staticClass: "form-text text-muted",
+                          attrs: { id: "emailHelp" }
+                        },
+                        [_vm._v("Tipe your email address.")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "password" } }, [
+                        _vm._v("Password")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.create.password,
+                            expression: "create.password"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "password",
+                          id: "password",
+                          placeholder: "Password"
+                        },
+                        domProps: { value: _vm.create.password },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.create,
+                              "password",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "confirmPassword" } }, [
+                        _vm._v("Confirm Password")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.create.confirmPassword,
+                            expression: "create.confirmPassword"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "password",
+                          id: "confirmPassword",
+                          placeholder: "Password"
+                        },
+                        domProps: { value: _vm.create.confirmPassword },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.create,
+                              "confirmPassword",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary",
+                      attrs: { type: "button", "data-dismiss": "modal" },
+                      on: {
+                        click: function($event) {
+                          return _vm.clearCreateForm()
+                        }
+                      }
+                    },
+                    [_vm._v("Cancel")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "button" }
+                    },
+                    [_vm._v("Create")]
+                  )
+                ])
+              ])
+            ]
+          )
+        ]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12" }, [
         _c("table", { staticClass: "table table-hover" }, [
-          _vm._m(1),
+          _vm._m(3),
           _vm._v(" "),
           _c(
             "tbody",
@@ -40141,7 +40402,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._m(2, true)]
+                    [_vm._m(4, true)]
                   ),
                   _vm._v(" "),
                   _c(
@@ -40153,7 +40414,7 @@ var render = function() {
                         "data-target": "#delConfirm-" + user.id
                       }
                     },
-                    [_vm._m(3, true)]
+                    [_vm._m(5, true)]
                   ),
                   _vm._v(" "),
                   _c(
@@ -40177,7 +40438,7 @@ var render = function() {
                         },
                         [
                           _c("div", { staticClass: "modal-content" }, [
-                            _vm._m(4, true),
+                            _vm._m(6, true),
                             _vm._v(" "),
                             _c("div", { staticClass: "modal-body" }, [
                               _vm._v(
@@ -40232,21 +40493,53 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-10" }, [
-        _c("h1", [_vm._v("\n\t\t\t\tList Users\n\t\t\t")])
-      ]),
+    return _c("div", { staticClass: "col-md-10" }, [
+      _c("h1", [_vm._v("\n\t\t\t\tList Users\n\t\t\t")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-2" }, [
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-primary float-lg-right",
+          attrs: {
+            href: "#",
+            role: "button",
+            "data-toggle": "modal",
+            "data-target": "#createUserModal"
+          }
+        },
+        [_vm._v("Create")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "createUserTitle" } },
+        [_vm._v("Create new user")]
+      ),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-2" }, [
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-primary float-lg-right",
-            attrs: { href: "#", role: "button" }
-          },
-          [_vm._v("Create")]
-        )
-      ])
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
     ])
   },
   function() {

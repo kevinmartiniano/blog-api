@@ -7,7 +7,46 @@
 				</h1>
 			</div>
 			<div class="col-md-2">
-				<a class="btn btn-primary float-lg-right" href="#" role="button">Create</a>
+				<a class="btn btn-primary float-lg-right" href="#" role="button" data-toggle="modal" data-target="#createUserModal">Create</a>
+			</div>
+			<!-- Modal -->
+			<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-labelledby="createUserTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="createUserTitle">Create new user</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form>
+								<div class="form-group">
+									<label for="name">Name</label>
+									<input type="text" class="form-control" v-model="create.name" id="name" aria-describedby="nameHelp" placeholder="Enter name">
+									<small id="nameHelp" class="form-text text-muted">Tipe your name.</small>
+								</div>
+								<div class="form-group">
+									<label for="email">Email address</label>
+									<input type="email" class="form-control" v-model="create.email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+									<small id="emailHelp" class="form-text text-muted">Tipe your email address.</small>
+								</div>
+								<div class="form-group">
+									<label for="password">Password</label>
+									<input type="password" class="form-control" v-model="create.password" id="password" placeholder="Password">
+								</div>
+								<div class="form-group">
+									<label for="confirmPassword">Confirm Password</label>
+									<input type="password" class="form-control" v-model="create.confirmPassword" id="confirmPassword" placeholder="Password">
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="clearCreateForm()">Cancel</button>
+							<button type="button" class="btn btn-primary">Create</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -82,6 +121,7 @@ export default {
 			clientId: '',
 			clientName: '',
 			tokens: [],
+			create: {},
 		};
 	},
 
@@ -99,6 +139,13 @@ export default {
 	},
 
 	methods: {
+		clearCreateForm() {
+			$('input[id="name"]').val("");
+			$('input[id="email"]').val("");
+			$('input[id="password"]').val("");
+			$('input[id="confirmPassword"]').val("");
+		},
+
 		editUser(uid) {
 			window.location.href = window.location.origin + '/admin/users/' + uid;
 		},
