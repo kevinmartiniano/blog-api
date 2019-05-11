@@ -37,13 +37,13 @@
 								</div>
 								<div class="form-group">
 									<label for="confirmPassword">Confirm Password</label>
-									<input type="password" class="form-control" v-model="create.confirmPassword" id="confirmPassword" placeholder="Password">
+									<input type="password" class="form-control" v-model="create.confirmPassword" id="confirmPassword" placeholder="Confirm Password">
 								</div>
 							</form>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="clearCreateForm()">Cancel</button>
-							<button type="button" class="btn btn-primary">Create</button>
+							<button type="button" class="btn btn-primary" v-on:click="createUser()">Create</button>
 						</div>
 					</div>
 				</div>
@@ -66,7 +66,7 @@
 							<th scope="row">{{ user.id }}</th>
 							<td>{{ user.name }}</td>
 							<td>{{ user.email }}</td>
-							<td><span :id="'type_' + user.id">{{ getUserType(user.id, user.user_type_id) }}</span></td>
+							<td><span :id="'type_' + user.id"></span></td>
 							<td>
 								<a v-on:click="editUser(user.id)" href="#">
 									<span class="fa-stack fa-md">
@@ -131,14 +131,42 @@ export default {
 	],
 
 	ready() {
-		//
+		this.getUserType();
 	},
 
 	mounted() {
-		//
+		this.getUserType();
 	},
 
 	methods: {
+		getUserType() {
+			this.requestApi('get','/api/v1/user-types/', {}, 'setUserType', {});
+		},
+
+		setUserType(o) {
+			for(var i = 0; i < this.users.length; i++) {
+				$('span[id="type_' + this.users[i].id + '"]').text(r => {
+					for(var n = 0; n < o.data.length; n++) {
+						if(o.data[n].id == this.users[i].user_type_id) {
+							return o.data[n].name;
+						}
+					}
+				});
+			}
+		},
+		
+		createUser() {
+			if(this.create.password == this.create.confirmPassword) {
+				this.requestApi('post', '/api/v1/admin/users/', {
+					name: this.create.name,
+					email: this.create.email,
+					password: this.create.password,
+				}, 'refreshPage', {});
+			} else {
+				console.log('Incorrect confirm password, please verify!');
+			}
+		},
+
 		clearCreateForm() {
 			$('input[id="name"]').val("");
 			$('input[id="email"]').val("");
@@ -151,21 +179,11 @@ export default {
 		},
 
 		delUser(uid) {
-			this.requestApi('delete', '/api/v1/admin/users/' + uid, {}, 'confirmDel', {});
+			this.requestApi('delete', '/api/v1/admin/users/' + uid, {}, 'refreshPage', {});
 		},
 
-		confirmDel() {
+		refreshPage(o, args) {
 			window.location.href = window.location.origin + '/admin/users/';
-		},
-
-		getUserType(uid, tid) {
-			this.requestApi('get', '/api/v1/user-types/' + tid, {}, 'setUserType', {
-				id: uid,
-			});
-		},
-
-		setUserType(user, o) {
-			document.getElementById('type_' + user.id).textContent = o.data.name;
 		},
 
 		requestApi(method, uri, form, exec, args) {
@@ -228,7 +246,7 @@ export default {
 					}
 				}).then(resp => {
 					this.revoke();
-					this[exec](args, resp);
+					this[exec](resp, args);
 				}).catch(e => {
 					console.error(e);
 				});
@@ -241,7 +259,7 @@ export default {
 					}
 				}).then(resp => {
 					this.revoke();
-					this[exec](args, resp);
+					this[exec](resp, args);
 				}).catch(e => {
 					console.error(e);
 				});

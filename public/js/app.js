@@ -2388,11 +2388,40 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   props: ['users', 'user_id'],
-  ready: function ready() {//
+  ready: function ready() {
+    this.getUserType();
   },
-  mounted: function mounted() {//
+  mounted: function mounted() {
+    this.getUserType();
   },
   methods: {
+    getUserType: function getUserType() {
+      this.requestApi('get', '/api/v1/user-types/', {}, 'setUserType', {});
+    },
+    setUserType: function setUserType(o) {
+      var _this = this;
+
+      for (var i = 0; i < this.users.length; i++) {
+        $('span[id="type_' + this.users[i].id + '"]').text(function (r) {
+          for (var n = 0; n < o.data.length; n++) {
+            if (o.data[n].id == _this.users[i].user_type_id) {
+              return o.data[n].name;
+            }
+          }
+        });
+      }
+    },
+    createUser: function createUser() {
+      if (this.create.password == this.create.confirmPassword) {
+        this.requestApi('post', '/api/v1/admin/users/', {
+          name: this.create.name,
+          email: this.create.email,
+          password: this.create.password
+        }, 'refreshPage', {});
+      } else {
+        console.log('Incorrect confirm password, please verify!');
+      }
+    },
     clearCreateForm: function clearCreateForm() {
       $('input[id="name"]').val("");
       $('input[id="email"]').val("");
@@ -2403,33 +2432,25 @@ __webpack_require__.r(__webpack_exports__);
       window.location.href = window.location.origin + '/admin/users/' + uid;
     },
     delUser: function delUser(uid) {
-      this.requestApi('delete', '/api/v1/admin/users/' + uid, {}, 'confirmDel', {});
+      this.requestApi('delete', '/api/v1/admin/users/' + uid, {}, 'refreshPage', {});
     },
-    confirmDel: function confirmDel() {
+    refreshPage: function refreshPage(o, args) {
       window.location.href = window.location.origin + '/admin/users/';
-    },
-    getUserType: function getUserType(uid, tid) {
-      this.requestApi('get', '/api/v1/user-types/' + tid, {}, 'setUserType', {
-        id: uid
-      });
-    },
-    setUserType: function setUserType(user, o) {
-      document.getElementById('type_' + user.id).textContent = o.data.name;
     },
     requestApi: function requestApi(method, uri, form, exec, args) {
       this.getClients(method, uri, form, exec, args);
     },
     getClients: function getClients(method, uri, form, exec, args) {
-      var _this = this;
+      var _this2 = this;
 
       axios.get('/oauth/clients').then(function (response) {
         if (response.data.length == 0) {
-          _this.createClient(method, uri, form, exec, args);
+          _this2.createClient(method, uri, form, exec, args);
         } else {
-          _this.clientId = response.data[0].id;
-          _this.clientName = response.data[0].name;
+          _this2.clientId = response.data[0].id;
+          _this2.clientName = response.data[0].name;
 
-          _this.setNewToken(method, uri, form, exec, args);
+          _this2.setNewToken(method, uri, form, exec, args);
         }
       }).catch(function (err) {
         if (err.response.status == 401) {
@@ -2440,13 +2461,13 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     createClient: function createClient(method, uri, form, exec, args) {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.post('/oauth/clients', {
         name: 'user ' + this.user_id,
         redirect: window.location.origin
       }).then(function (response) {
-        _this2.getClients(method, uri, form, exec, args);
+        _this3.getClients(method, uri, form, exec, args);
       }).catch(function (error) {
         console.error(error);
       });
@@ -2456,22 +2477,22 @@ __webpack_require__.r(__webpack_exports__);
      * Creating new personal access token for the user.
      */
     setNewToken: function setNewToken(method, uri, form, exec, args) {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post('/oauth/personal-access-tokens', {
         name: this.clientName,
         scopes: []
       }).then(function (response) {
-        _this3.accessToken = response.data.accessToken;
-        _this3.accessTokenId = response.data.token.id;
+        _this4.accessToken = response.data.accessToken;
+        _this4.accessTokenId = response.data.token.id;
 
-        _this3.sendRequest(method, uri, form, exec, args);
+        _this4.sendRequest(method, uri, form, exec, args);
       }).catch(function (error) {
         console.error(error);
       });
     },
     sendRequest: function sendRequest(method, uri, form, exec, args) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (method == 'get' || method == 'delete') {
         axios[method](uri, {
@@ -2481,9 +2502,9 @@ __webpack_require__.r(__webpack_exports__);
             'Accept': "application/json"
           }
         }).then(function (resp) {
-          _this4.revoke();
+          _this5.revoke();
 
-          _this4[exec](args, resp);
+          _this5[exec](resp, args);
         }).catch(function (e) {
           console.error(e);
         });
@@ -2495,9 +2516,9 @@ __webpack_require__.r(__webpack_exports__);
             'Accept': "application/json"
           }
         }).then(function (resp) {
-          _this4.revoke();
+          _this5.revoke();
 
-          _this4[exec](args, resp);
+          _this5[exec](resp, args);
         }).catch(function (e) {
           console.error(e);
         });
@@ -2508,13 +2529,13 @@ __webpack_require__.r(__webpack_exports__);
      * Deleting last created token.
      */
     revoke: function revoke() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId).then(function (resp) {
-        _this5.accessTokenId = '';
-        _this5.accessToken = '';
-        _this5.clientId = '';
-        _this5.clientname = '';
+        _this6.accessTokenId = '';
+        _this6.accessToken = '';
+        _this6.clientId = '';
+        _this6.clientname = '';
       });
     }
   }
@@ -40317,7 +40338,7 @@ var render = function() {
                         attrs: {
                           type: "password",
                           id: "confirmPassword",
-                          placeholder: "Password"
+                          placeholder: "Confirm Password"
                         },
                         domProps: { value: _vm.create.confirmPassword },
                         on: {
@@ -40356,7 +40377,12 @@ var render = function() {
                     "button",
                     {
                       staticClass: "btn btn-primary",
-                      attrs: { type: "button" }
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.createUser()
+                        }
+                      }
                     },
                     [_vm._v("Create")]
                   )
@@ -40385,11 +40411,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(user.email))]),
                 _vm._v(" "),
-                _c("td", [
-                  _c("span", { attrs: { id: "type_" + user.id } }, [
-                    _vm._v(_vm._s(_vm.getUserType(user.id, user.user_type_id)))
-                  ])
-                ]),
+                _c("td", [_c("span", { attrs: { id: "type_" + user.id } })]),
                 _vm._v(" "),
                 _c("td", [
                   _c(
