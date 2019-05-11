@@ -79,7 +79,9 @@ export default {
 		return {
 			accessToken: '',
 			accessTokenId: '',
-			clients: [],
+			clientId: '',
+			clientName: '',
+			tokens: [],
 		};
 	},
 
@@ -102,12 +104,11 @@ export default {
 		},
 
 		delUser(uid) {
-			console.log(uid);
 			this.requestApi('delete', '/api/v1/admin/users/' + uid, {}, 'confirmDel', {});
 		},
 
 		confirmDel() {
-			// TODO: refresh the page.
+			window.location.href = window.location.origin + '/admin/users/';
 		},
 
 		getUserType(uid, tid) {
@@ -126,11 +127,11 @@ export default {
 
 		getClients(method, uri, form, exec, args) {
 			axios.get('/oauth/clients').then(response => {
-				this.clients = response.data;
-
-				if(this.clients.length == 0) {
+				if(response.data.length == 0) {
 					this.createClient(method, uri, form, exec, args);
 				} else {
+					this.clientId = response.data[0].id;
+					this.clientName = response.data[0].name;
 					this.setNewToken(method, uri, form, exec, args);
 				}
 			}).catch(err => {
@@ -158,7 +159,7 @@ export default {
 		 */
 		setNewToken(method, uri, form, exec, args) {
 			axios.post('/oauth/personal-access-tokens', {
-				name: this.clients[this.clients.length - 1].name,
+				name: this.clientName,
 				scopes: []
 			}).then(response => {
 				this.accessToken = response.data.accessToken;
@@ -204,7 +205,12 @@ export default {
 		 * Deleting last created token.
 		 */
 		revoke() {
-			axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId);
+			axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId).then(resp => {
+				this.accessTokenId = '';
+				this.accessToken = '';
+				this.clientId = '';
+				this.clientname = '';
+			});
 		},
 	},
 }

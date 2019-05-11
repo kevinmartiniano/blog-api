@@ -2342,7 +2342,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       accessToken: '',
       accessTokenId: '',
-      clients: []
+      clientId: '',
+      clientName: '',
+      tokens: []
     };
   },
   props: ['users', 'user_id'],
@@ -2355,10 +2357,10 @@ __webpack_require__.r(__webpack_exports__);
       window.location.href = window.location.origin + '/admin/users/' + uid;
     },
     delUser: function delUser(uid) {
-      console.log(uid);
       this.requestApi('delete', '/api/v1/admin/users/' + uid, {}, 'confirmDel', {});
     },
-    confirmDel: function confirmDel() {// TODO: refresh the page.
+    confirmDel: function confirmDel() {
+      window.location.href = window.location.origin + '/admin/users/';
     },
     getUserType: function getUserType(uid, tid) {
       this.requestApi('get', '/api/v1/user-types/' + tid, {}, 'setUserType', {
@@ -2375,11 +2377,12 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get('/oauth/clients').then(function (response) {
-        _this.clients = response.data;
-
-        if (_this.clients.length == 0) {
+        if (response.data.length == 0) {
           _this.createClient(method, uri, form, exec, args);
         } else {
+          _this.clientId = response.data[0].id;
+          _this.clientName = response.data[0].name;
+
           _this.setNewToken(method, uri, form, exec, args);
         }
       }).catch(function (err) {
@@ -2410,7 +2413,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       axios.post('/oauth/personal-access-tokens', {
-        name: this.clients[this.clients.length - 1].name,
+        name: this.clientName,
         scopes: []
       }).then(function (response) {
         _this3.accessToken = response.data.accessToken;
@@ -2459,7 +2462,14 @@ __webpack_require__.r(__webpack_exports__);
      * Deleting last created token.
      */
     revoke: function revoke() {
-      axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId);
+      var _this5 = this;
+
+      axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId).then(function (resp) {
+        _this5.accessTokenId = '';
+        _this5.accessToken = '';
+        _this5.clientId = '';
+        _this5.clientname = '';
+      });
     }
   }
 });
