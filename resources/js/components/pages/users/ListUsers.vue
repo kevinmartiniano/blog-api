@@ -68,7 +68,7 @@
 							<td>{{ user.email }}</td>
 							<td><span :id="'type_' + user.id"></span></td>
 							<td>
-								<a v-on:click="editUser(user.id)" href="#">
+								<a href="#" data-toggle="modal" :data-target="'#editUserModal-' + user.id">
 									<span class="fa-stack fa-md">
 										<i class="fas fa-square fa-stack-2x"></i>
 										<i class="fa fa-edit fa-stack-1x fa-inverse"></i>
@@ -82,7 +82,46 @@
 									</span>
 								</a>
 
-								<!-- Button trigger modal -->
+								<!-- Modal -->
+								<div class="modal fade" :id="'editUserModal-' + user.id" tabindex="-1" role="dialog" aria-labelledby="editUserTitle" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="editUserTitle">Edit user</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<form>
+													<div class="form-group">
+														<label :for="'name-' + user.id">Name</label>
+														<input type="text" class="form-control" :id="'name-' + user.id" aria-describedby="nameHelp" placeholder="Enter name" v-bind:value="user.name">
+														<small id="nameHelp" class="form-text text-muted">Tipe your name.</small>
+													</div>
+													<div class="form-group">
+														<label :for="'email-' + user.id">Email address</label>
+														<input type="email" class="form-control" :id="'email-' + user.id" aria-describedby="emailHelp" placeholder="Enter email" v-bind:value="user.email">
+														<small id="emailHelp" class="form-text text-muted">Tipe your email address.</small>
+													</div>
+													<div class="form-group">
+														<label :for="'password-' + user.id">Password</label>
+														<input type="password" class="form-control" :id="'password-' + user.id" placeholder="Password">
+													</div>
+													<div class="form-group">
+														<label :for="'confirmPassword-' + user.id">Confirm Password</label>
+														<input type="password" class="form-control" :id="'confirmPassword-' + user.id" placeholder="Confirm Password">
+													</div>
+												</form>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+												<button type="button" class="btn btn-primary" v-on:click="editUser(user.id)">Submit</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
 								<!-- Modal -->
 								<div class="modal fade" :id="'delConfirm-' + user.id" tabindex="-1" role="dialog" aria-labelledby="delConfirmLabel" aria-hidden="true">
 									<div class="modal-dialog" role="document">
@@ -122,6 +161,7 @@ export default {
 			clientName: '',
 			tokens: [],
 			create: {},
+			edit: [],
 		};
 	},
 
@@ -175,7 +215,26 @@ export default {
 		},
 
 		editUser(uid) {
-			window.location.href = window.location.origin + '/admin/users/' + uid;
+			if($('#password-' + uid).val() == $('#confirmPassword-' + uid).val() && $('#password-' + uid).val() != '') {
+				var edit = {
+					name: $('#name-' + uid).val(),
+					email: $('#email-' + uid).val(),
+					password: $('#password-' + uid).val(),
+				};
+
+				this.requestApi('put', '/api/v1/admin/users/' + uid, edit, 'refreshPage', {});
+			} else {
+				if($('#password-' + uid).val() == '') {
+					var edit = {
+						name: $('#name-' + uid).val(),
+						email: $('#email-' + uid).val(),
+					};
+
+					this.requestApi('put', '/api/v1/admin/users/' + uid, edit, 'refreshPage', {});
+				} else {
+					alert('Wrong password!');
+				}
+			}
 		},
 
 		delUser(uid) {

@@ -2376,6 +2376,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2384,7 +2423,8 @@ __webpack_require__.r(__webpack_exports__);
       clientId: '',
       clientName: '',
       tokens: [],
-      create: {}
+      create: {},
+      edit: []
     };
   },
   props: ['users', 'user_id'],
@@ -2429,7 +2469,24 @@ __webpack_require__.r(__webpack_exports__);
       $('input[id="confirmPassword"]').val("");
     },
     editUser: function editUser(uid) {
-      window.location.href = window.location.origin + '/admin/users/' + uid;
+      if ($('#password-' + uid).val() == $('#confirmPassword-' + uid).val() && $('#password-' + uid).val() != '') {
+        var edit = {
+          name: $('#name-' + uid).val(),
+          email: $('#email-' + uid).val(),
+          password: $('#password-' + uid).val()
+        };
+        this.requestApi('put', '/api/v1/admin/users/' + uid, edit, 'refreshPage', {});
+      } else {
+        if ($('#password-' + uid).val() == '') {
+          var edit = {
+            name: $('#name-' + uid).val(),
+            email: $('#email-' + uid).val()
+          };
+          this.requestApi('put', '/api/v1/admin/users/' + uid, edit, 'refreshPage', {});
+        } else {
+          alert('Wrong password!');
+        }
+      }
     },
     delUser: function delUser(uid) {
       this.requestApi('delete', '/api/v1/admin/users/' + uid, {}, 'refreshPage', {});
@@ -40417,11 +40474,10 @@ var render = function() {
                   _c(
                     "a",
                     {
-                      attrs: { href: "#" },
-                      on: {
-                        click: function($event) {
-                          return _vm.editUser(user.id)
-                        }
+                      attrs: {
+                        href: "#",
+                        "data-toggle": "modal",
+                        "data-target": "#editUserModal-" + user.id
                       }
                     },
                     [_vm._m(4, true)]
@@ -40437,6 +40493,160 @@ var render = function() {
                       }
                     },
                     [_vm._m(5, true)]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal fade",
+                      attrs: {
+                        id: "editUserModal-" + user.id,
+                        tabindex: "-1",
+                        role: "dialog",
+                        "aria-labelledby": "editUserTitle",
+                        "aria-hidden": "true"
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "modal-dialog modal-dialog-centered",
+                          attrs: { role: "document" }
+                        },
+                        [
+                          _c("div", { staticClass: "modal-content" }, [
+                            _vm._m(6, true),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-body" }, [
+                              _c("form", [
+                                _c("div", { staticClass: "form-group" }, [
+                                  _c(
+                                    "label",
+                                    { attrs: { for: "name-" + user.id } },
+                                    [_vm._v("Name")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      type: "text",
+                                      id: "name-" + user.id,
+                                      "aria-describedby": "nameHelp",
+                                      placeholder: "Enter name"
+                                    },
+                                    domProps: { value: user.name }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "small",
+                                    {
+                                      staticClass: "form-text text-muted",
+                                      attrs: { id: "nameHelp" }
+                                    },
+                                    [_vm._v("Tipe your name.")]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "form-group" }, [
+                                  _c(
+                                    "label",
+                                    { attrs: { for: "email-" + user.id } },
+                                    [_vm._v("Email address")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      type: "email",
+                                      id: "email-" + user.id,
+                                      "aria-describedby": "emailHelp",
+                                      placeholder: "Enter email"
+                                    },
+                                    domProps: { value: user.email }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "small",
+                                    {
+                                      staticClass: "form-text text-muted",
+                                      attrs: { id: "emailHelp" }
+                                    },
+                                    [_vm._v("Tipe your email address.")]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "form-group" }, [
+                                  _c(
+                                    "label",
+                                    { attrs: { for: "password-" + user.id } },
+                                    [_vm._v("Password")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      type: "password",
+                                      id: "password-" + user.id,
+                                      placeholder: "Password"
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "form-group" }, [
+                                  _c(
+                                    "label",
+                                    {
+                                      attrs: {
+                                        for: "confirmPassword-" + user.id
+                                      }
+                                    },
+                                    [_vm._v("Confirm Password")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      type: "password",
+                                      id: "confirmPassword-" + user.id,
+                                      placeholder: "Confirm Password"
+                                    }
+                                  })
+                                ])
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-footer" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-secondary",
+                                  attrs: {
+                                    type: "button",
+                                    "data-dismiss": "modal"
+                                  }
+                                },
+                                [_vm._v("Cancel")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.editUser(user.id)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Submit")]
+                              )
+                            ])
+                          ])
+                        ]
+                      )
+                    ]
                   ),
                   _vm._v(" "),
                   _c(
@@ -40460,7 +40670,7 @@ var render = function() {
                         },
                         [
                           _c("div", { staticClass: "modal-content" }, [
-                            _vm._m(6, true),
+                            _vm._m(7, true),
                             _vm._v(" "),
                             _c("div", { staticClass: "modal-body" }, [
                               _vm._v(
@@ -40600,6 +40810,29 @@ var staticRenderFns = [
       _c("i", { staticClass: "fas fa-square fa-stack-2x" }),
       _vm._v(" "),
       _c("i", { staticClass: "fas fa-trash-alt fa-stack-1x fa-inverse" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title", attrs: { id: "editUserTitle" } }, [
+        _vm._v("Edit user")
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
     ])
   },
   function() {
