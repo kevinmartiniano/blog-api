@@ -51,6 +51,10 @@ class AdminUserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        if($request['password'] != '') {
+            $request['password'] = Hash::make($request['password']);
+        }
+
         $user->update($request->all());
 
         return $user;
