@@ -68,6 +68,13 @@
 							<td>{{ user.email }}</td>
 							<td><span :id="'type_' + user.id"></span></td>
 							<td>
+								<a href="#" v-on:click="showDetails(user.id)">
+									<span class="fa-stack fa-md">
+										<i class="fas fa-square fa-stack-2x"></i>
+										<i class="fa fa-file fa-stack-1x fa-inverse"></i>
+									</span>
+								</a>
+
 								<a href="#" data-toggle="modal" :data-target="'#editUserModal-' + user.id">
 									<span class="fa-stack fa-md">
 										<i class="fas fa-square fa-stack-2x"></i>
@@ -179,6 +186,10 @@ export default {
 	},
 
 	methods: {
+		showDetails(uid) {
+			window.location.href = window.location.origin + '/users/' + uid;
+		},
+
 		getUserType() {
 			this.requestApi('get','/api/v1/user-types/', {}, 'setUserType', {});
 		},

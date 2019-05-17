@@ -2415,6 +2415,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2435,6 +2442,9 @@ __webpack_require__.r(__webpack_exports__);
     this.getUserType();
   },
   methods: {
+    showDetails: function showDetails(uid) {
+      window.location.href = window.location.origin + '/users/' + uid;
+    },
     getUserType: function getUserType() {
       this.requestApi('get', '/api/v1/user-types/', {}, 'setUserType', {});
     },
@@ -40474,10 +40484,11 @@ var render = function() {
                   _c(
                     "a",
                     {
-                      attrs: {
-                        href: "#",
-                        "data-toggle": "modal",
-                        "data-target": "#editUserModal-" + user.id
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          return _vm.showDetails(user.id)
+                        }
                       }
                     },
                     [_vm._m(4, true)]
@@ -40489,10 +40500,22 @@ var render = function() {
                       attrs: {
                         href: "#",
                         "data-toggle": "modal",
-                        "data-target": "#delConfirm-" + user.id
+                        "data-target": "#editUserModal-" + user.id
                       }
                     },
                     [_vm._m(5, true)]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      attrs: {
+                        href: "#",
+                        "data-toggle": "modal",
+                        "data-target": "#delConfirm-" + user.id
+                      }
+                    },
+                    [_vm._m(6, true)]
                   ),
                   _vm._v(" "),
                   _c(
@@ -40516,7 +40539,7 @@ var render = function() {
                         },
                         [
                           _c("div", { staticClass: "modal-content" }, [
-                            _vm._m(6, true),
+                            _vm._m(7, true),
                             _vm._v(" "),
                             _c("div", { staticClass: "modal-body" }, [
                               _c("form", [
@@ -40670,7 +40693,7 @@ var render = function() {
                         },
                         [
                           _c("div", { staticClass: "modal-content" }, [
-                            _vm._m(7, true),
+                            _vm._m(8, true),
                             _vm._v(" "),
                             _c("div", { staticClass: "modal-body" }, [
                               _vm._v(
@@ -40790,6 +40813,16 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Actions")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "fa-stack fa-md" }, [
+      _c("i", { staticClass: "fas fa-square fa-stack-2x" }),
+      _vm._v(" "),
+      _c("i", { staticClass: "fa fa-file fa-stack-1x fa-inverse" })
     ])
   },
   function() {
