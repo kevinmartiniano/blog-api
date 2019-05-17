@@ -21,7 +21,7 @@
                     <a class="nav-link" href="/admin/posts/">New Post</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/users/">Users</a>
+                    <a class="nav-link" href="/users/">Users</a>
                 </li>
 
                 <!-- Authentication Links -->

@@ -208,7 +208,7 @@ export default {
 		
 		createUser() {
 			if(this.create.password == this.create.confirmPassword) {
-				this.requestApi('post', '/api/v1/admin/users/', {
+				this.requestApi('post', '/api/v1/users/', {
 					name: this.create.name,
 					email: this.create.email,
 					password: this.create.password,
@@ -233,7 +233,7 @@ export default {
 					password: $('#password-' + uid).val(),
 				};
 
-				this.requestApi('put', '/api/v1/admin/users/' + uid, edit, 'refreshPage', {});
+				this.requestApi('put', '/api/v1/users/' + uid, edit, 'refreshPage', {});
 			} else {
 				if($('#password-' + uid).val() == '') {
 					var edit = {
@@ -241,7 +241,7 @@ export default {
 						email: $('#email-' + uid).val(),
 					};
 
-					this.requestApi('put', '/api/v1/admin/users/' + uid, edit, 'refreshPage', {});
+					this.requestApi('put', '/api/v1/users/' + uid, edit, 'refreshPage', {});
 				} else {
 					alert('Wrong password!');
 				}
@@ -249,11 +249,11 @@ export default {
 		},
 
 		delUser(uid) {
-			this.requestApi('delete', '/api/v1/admin/users/' + uid, {}, 'refreshPage', {});
+			this.requestApi('delete', '/api/v1/users/' + uid, {}, 'refreshPage', {});
 		},
 
 		refreshPage(o, args) {
-			window.location.href = window.location.origin + '/admin/users/';
+			window.location.href = window.location.origin + '/users/';
 		},
 
 		requestApi(method, uri, form, exec, args) {

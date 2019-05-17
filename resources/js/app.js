@@ -61,13 +61,18 @@ Vue.component(
 );
 
 Vue.component(
-    'edit-user',
-    require('./components/pages/users/EditUser.vue').default
+    'list-posts',
+    require('./components/pages/posts/ListPosts.vue').default
 );
 
 Vue.component(
     'list-users',
     require('./components/pages/users/ListUsers.vue').default
+);
+
+Vue.component(
+    'detail-users',
+    require('./components/pages/users/DetailUsers.vue').default
 );
 
 /**

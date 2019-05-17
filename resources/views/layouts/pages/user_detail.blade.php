@@ -5,7 +5,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 col-md-10 mx-auto">
-					<div>
+					{{-- <div>
 						<p>
 							<h1>
 								Details user
@@ -25,7 +25,8 @@
 								<p class="help-block text-danger"></p>
 							</div>
 						</div>
-					</div>
+					</div> --}}
+					<detail-users :user="{{ $user }}"></detail-users>
 				</div>
 			</div>
 		</div>

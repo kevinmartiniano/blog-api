@@ -15,21 +15,7 @@ class AdminUserController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    public function listUsers() {
-        return view('layouts.pages.list_user', ['users' => User::all()]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return User::all();
     }
 
     /**
@@ -51,20 +37,9 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user)
-    {
-        return view('layouts.pages.edit_user', ['user' => $user]);
+        return $user;
     }
 
     /**

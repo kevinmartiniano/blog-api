@@ -14,17 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::all();
-    }
-
-    public function home() {
-        return view('layouts.pages.home', ['posts' => Post::paginate()]);
-    }
-
-    public function details($id) {
-        $post = Post::find($id);
-
-        return view('layouts.pages.post', ['post' => $post]);
+        return view('layouts.pages.post_list', ['posts' => Post::paginate()]);
     }
 
     /**
@@ -45,9 +35,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-
-        return Post::create($data);
+        //
     }
 
     /**
@@ -58,7 +46,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return $post;
+        return view('layouts.pages.post_detail', ['post' => $post]);
     }
 
     /**
@@ -81,9 +69,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $post->update($request->all());
-
-        return $post;
+        //
     }
 
     /**
@@ -94,6 +80,6 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
+        //
     }
 }

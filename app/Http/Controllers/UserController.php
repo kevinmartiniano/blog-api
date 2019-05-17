@@ -14,11 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
-    }
-
-    public function details(User $user) {
-        return view('layouts.pages.detail_user', ['user' => $user]);
+        return view('layouts.pages.user_list', ['users' => User::all()]);
     }
 
     /**
@@ -50,18 +46,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return $user;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return view('layouts.pages.user_detail', ['user' => $user]);
     }
 
     /**
@@ -71,11 +56,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
-        $user->update($request->all());
-
-        return $user;
+        //
     }
 
     /**
@@ -84,7 +67,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
         //
     }

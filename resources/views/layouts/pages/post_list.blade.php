@@ -6,10 +6,11 @@
 			<div class="row">
 				<div class="col-lg-8 col-md-10 mx-auto">
 					@guest
-						<edit-user :user_edit="{{ $user }}"></edit-user>
+						<list-posts :posts="{{ json_encode($posts) }}"></list-posts>
 					@else
-						<edit-user :user_edit="{{ $user }}" user_id="{{ Auth::user()->id }}"></edit-user>
+						<list-posts :posts="{{ json_encode($posts) }}" user_id="{{ Auth::user()->id }}"></list-posts>
 					@endguest
+					{{ $posts }}
 				</div>
 			</div>
 		</div>

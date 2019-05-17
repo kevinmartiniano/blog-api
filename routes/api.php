@@ -22,17 +22,12 @@ Route::middleware("auth:api")->prefix('v1')->group(function () {
         'posts' => 'PostController',
         'comments' => 'CommentController',
         'likes' => 'LikeController',
-        'users' => 'UserController',
+        'users' => 'AdminUserController',
         'user-types' => 'UserTypeController',
-        'admin/users' => 'AdminUserController',
     ]);
 });
 
 Route::prefix('v1')->group(function () {
     Route::post('contact', 'ContactController@store');
     Route::get('contact', 'ContactController@index');
-
-    // Route::get('users/{user}', 'UserController@show');
-
-    // Route::put('users/{user}', 'AdminUserController@update');
 });

@@ -19,19 +19,19 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/', 'PostController@home');
+Route::get('/', 'PostController@index');
 
-Route::get('/posts/{id}', 'PostController@details');
-Route::get('/admin/posts', 'PostController@create');
+
 
 Route::get('/about', function () {
     return view('layouts.pages.about');
 });
 
-Route::get('/admin/users', 'AdminUserController@listUsers');
-Route::get('/admin/users/{user}', 'AdminUserController@edit');
-Route::put('/admin/users/{user}', 'AdminUserController@update');
+Route::resources([
+    'users' => 'UserController',
+    'posts' => 'PostController',
+]);
+
+Route::get('/admin/posts', 'PostController@create');
 
 Route::get('/contact', 'ContactController@create');
-
-Route::get('/users/{user}', 'UserController@details');
