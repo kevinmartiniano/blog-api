@@ -25,6 +25,6 @@ class HomeController extends Controller
     public function index()
     {
         // return view('home');
-        return view('layouts.pages.home', ['posts' => Post::paginate()]);
+        return view('layouts.pages.home', ['posts' => Post::orderBy('created_at', 'desc')->paginate()]);
     }
 }

@@ -14,7 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('layouts.pages.post_list', ['posts' => Post::paginate()]);
+        return view('layouts.pages.post_list', ['posts' => Post::orderBy('created_at', 'desc')->paginate()]);
     }
 
     /**
