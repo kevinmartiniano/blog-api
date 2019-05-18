@@ -2161,6 +2161,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2179,6 +2237,26 @@ __webpack_require__.r(__webpack_exports__);
     this.getUserNames();
   },
   methods: {
+    delUser: function delUser(pid) {
+      this.requestApi('put', '/api/v1/posts/' + pid, {}, 'refreshPage', {});
+    },
+    editPost: function editPost(pid) {
+      var post = {
+        title: this.getTitle(pid),
+        subtitle: this.getSubtitle(pid),
+        content: this.getContent(pid)
+      };
+      this.requestApi('put', '/api/v1/posts/' + pid, post, 'refreshPage', {});
+    },
+    getTitle: function getTitle(pid) {
+      return $('input[id="title-' + pid + '"]').val();
+    },
+    getSubtitle: function getSubtitle(pid) {
+      return $('input[id="subtitle-' + pid + '"]').val();
+    },
+    getContent: function getContent(pid) {
+      return $('textarea[id="content-' + pid + '"]').val();
+    },
     postView: function postView(pid) {
       window.location.href = window.location.origin + '/posts/' + pid;
     },
@@ -40428,9 +40506,241 @@ var render = function() {
                     [_vm._m(2, true)]
                   ),
                   _vm._v(" "),
-                  _vm._m(3, true),
+                  _c(
+                    "a",
+                    {
+                      attrs: {
+                        href: "#",
+                        "data-toggle": "modal",
+                        "data-target": "#editPostModal-" + post.id
+                      }
+                    },
+                    [_vm._m(3, true)]
+                  ),
                   _vm._v(" "),
-                  _vm._m(4, true)
+                  _c(
+                    "a",
+                    {
+                      attrs: {
+                        href: "#",
+                        "data-toggle": "modal",
+                        "data-target": "#delConfirm-" + post.id
+                      }
+                    },
+                    [_vm._m(4, true)]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal fade",
+                      attrs: {
+                        id: "editPostModal-" + post.id,
+                        tabindex: "-1",
+                        role: "dialog",
+                        "aria-labelledby": "editPostTitle",
+                        "aria-hidden": "true"
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "modal-dialog modal-dialog-centered",
+                          attrs: { role: "document" }
+                        },
+                        [
+                          _c("div", { staticClass: "modal-content" }, [
+                            _vm._m(5, true),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-body" }, [
+                              _c("form", [
+                                _c("div", { staticClass: "form-group" }, [
+                                  _c(
+                                    "label",
+                                    { attrs: { for: "title-" + post.id } },
+                                    [_vm._v("Title")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      type: "text",
+                                      id: "title-" + post.id,
+                                      "aria-describedby": "titleHelp",
+                                      placeholder: "Enter title",
+                                      maxlength: "50",
+                                      required: ""
+                                    },
+                                    domProps: { value: post.title }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "small",
+                                    {
+                                      staticClass: "form-text text-muted",
+                                      attrs: { id: "titleHelp" }
+                                    },
+                                    [_vm._v("Tipe a title.")]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "form-group" }, [
+                                  _c(
+                                    "label",
+                                    { attrs: { for: "subtitle-" + post.id } },
+                                    [_vm._v("Subtitle")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("input", {
+                                    staticClass: "form-control",
+                                    attrs: {
+                                      type: "text",
+                                      id: "subtitle-" + post.id,
+                                      "aria-describedby": "subtitleHelp",
+                                      placeholder: "Enter subtitle",
+                                      maxlength: "50",
+                                      required: ""
+                                    },
+                                    domProps: { value: post.subtitle }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "small",
+                                    {
+                                      staticClass: "form-text text-muted",
+                                      attrs: { id: "subtitleHelp" }
+                                    },
+                                    [_vm._v("Tipe a subtitle.")]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "form-group" }, [
+                                  _c(
+                                    "label",
+                                    { attrs: { for: "content-" + post.id } },
+                                    [_vm._v("Content")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("textarea", {
+                                    staticClass: "form-control rounded-0",
+                                    attrs: {
+                                      id: "content-" + post.id,
+                                      "aria-describedby": "subtitleHelp",
+                                      placeholder: "Content",
+                                      rows: "6",
+                                      maxlength: "50",
+                                      required: ""
+                                    },
+                                    domProps: { value: post.content }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "small",
+                                    {
+                                      staticClass: "form-text text-muted",
+                                      attrs: { id: "contentHelp" }
+                                    },
+                                    [_vm._v("Tipe a content.")]
+                                  )
+                                ])
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-footer" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-secondary",
+                                  attrs: {
+                                    type: "button",
+                                    "data-dismiss": "modal"
+                                  }
+                                },
+                                [_vm._v("Cancel")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.editPost(post.id)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Submit")]
+                              )
+                            ])
+                          ])
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "modal fade",
+                      attrs: {
+                        id: "delConfirm-" + post.id,
+                        tabindex: "-1",
+                        role: "dialog",
+                        "aria-labelledby": "delConfirmLabel",
+                        "aria-hidden": "true"
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "modal-dialog",
+                          attrs: { role: "document" }
+                        },
+                        [
+                          _c("div", { staticClass: "modal-content" }, [
+                            _vm._m(6, true),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-body" }, [
+                              _vm._v(
+                                "\n\t\t\t\t\t\t\t\t\t\t\tAre you sure you want to delete this post?\n\t\t\t\t\t\t\t\t\t\t"
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "modal-footer" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-secondary",
+                                  attrs: {
+                                    type: "button",
+                                    "data-dismiss": "modal"
+                                  }
+                                },
+                                [_vm._v("Cancel")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.delPost(post.id)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Confirm")]
+                              )
+                            ])
+                          ])
+                        ]
+                      )
+                    ]
+                  )
                 ])
               ])
             }),
@@ -40495,24 +40805,68 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("a", { attrs: { href: "#" } }, [
-      _c("span", { staticClass: "fa-stack fa-md" }, [
-        _c("i", { staticClass: "fas fa-square fa-stack-2x" }),
-        _vm._v(" "),
-        _c("i", { staticClass: "fa fa-edit fa-stack-1x fa-inverse" })
-      ])
+    return _c("span", { staticClass: "fa-stack fa-md" }, [
+      _c("i", { staticClass: "fas fa-square fa-stack-2x" }),
+      _vm._v(" "),
+      _c("i", { staticClass: "fa fa-edit fa-stack-1x fa-inverse" })
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("a", { attrs: { href: "#" } }, [
-      _c("span", { staticClass: "fa-stack fa-md" }, [
-        _c("i", { staticClass: "fas fa-square fa-stack-2x" }),
-        _vm._v(" "),
-        _c("i", { staticClass: "fas fa-trash-alt fa-stack-1x fa-inverse" })
-      ])
+    return _c("span", { staticClass: "fa-stack fa-md" }, [
+      _c("i", { staticClass: "fas fa-square fa-stack-2x" }),
+      _vm._v(" "),
+      _c("i", { staticClass: "fas fa-trash-alt fa-stack-1x fa-inverse" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title", attrs: { id: "editPostTitle" } }, [
+        _vm._v("Edit post")
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "'delConfirmLabel" } },
+        [_vm._v("Delete Post")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
     ])
   }
 ]

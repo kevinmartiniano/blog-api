@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Post;
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class AdminPostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,17 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('layouts.pages.post_list', ['posts' => Post::paginate()]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('layouts.pages.create_post');
+        return Post::all();
     }
 
     /**
@@ -35,51 +25,42 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return Post::create($request->all());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Post  $post
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show(Post $post)
     {
-        return view('layouts.pages.post_detail', ['post' => $post]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Post $post)
-    {
-        //
+        return $post;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Post  $post
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $post->update($request->all());
+
+        return $post;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Post  $post
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
     }
 }

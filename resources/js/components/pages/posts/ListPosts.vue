@@ -36,19 +36,77 @@
 									</span>
 								</a>
 
-								<a href="#">
+								<a href="#" data-toggle="modal" :data-target="'#editPostModal-' + post.id">
 									<span class="fa-stack fa-md">
 										<i class="fas fa-square fa-stack-2x"></i>
 										<i class="fa fa-edit fa-stack-1x fa-inverse"></i>
 									</span>
 								</a>
 
-								<a href="#">
+								<a href="#" data-toggle="modal" :data-target="'#delConfirm-' + post.id">
 									<span class="fa-stack fa-md">
 										<i class="fas fa-square fa-stack-2x"></i>
 										<i class="fas fa-trash-alt fa-stack-1x fa-inverse"></i>
 									</span>
 								</a>
+
+								<!-- Modal -->
+								<div class="modal fade" :id="'editPostModal-' + post.id" tabindex="-1" role="dialog" aria-labelledby="editPostTitle" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="editPostTitle">Edit post</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<form>
+													<div class="form-group">
+														<label :for="'title-' + post.id">Title</label>
+														<input type="text" class="form-control" :id="'title-' + post.id" aria-describedby="titleHelp" placeholder="Enter title" maxlength="50" v-bind:value="post.title" required>
+														<small id="titleHelp" class="form-text text-muted">Tipe a title.</small>
+													</div>
+													<div class="form-group">
+														<label :for="'subtitle-' + post.id">Subtitle</label>
+														<input type="text" class="form-control" :id="'subtitle-' + post.id" aria-describedby="subtitleHelp" placeholder="Enter subtitle" maxlength="50" v-bind:value="post.subtitle" required>
+														<small id="subtitleHelp" class="form-text text-muted">Tipe a subtitle.</small>
+													</div>
+													<div class="form-group">
+														<label :for="'content-' + post.id">Content</label>
+														<textarea class="form-control rounded-0" :id="'content-' + post.id" aria-describedby="subtitleHelp" placeholder="Content" rows="6" maxlength="50" v-bind:value="post.content" required></textarea>
+														<small id="contentHelp" class="form-text text-muted">Tipe a content.</small>
+													</div>
+												</form>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+												<button type="button" class="btn btn-primary" v-on:click="editPost(post.id)">Submit</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Modal -->
+								<div class="modal fade" :id="'delConfirm-' + post.id" tabindex="-1" role="dialog" aria-labelledby="delConfirmLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="'delConfirmLabel">Delete Post</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												Are you sure you want to delete this post?
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+												<button type="button" class="btn btn-primary" v-on:click="delPost(post.id)">Confirm</button>
+											</div>
+										</div>
+									</div>
+								</div>
 							</td>
 						</tr>
 					</tbody>
@@ -84,6 +142,32 @@ export default {
 	},
 
 	methods: {
+		delUser(pid) {
+			this.requestApi('put', '/api/v1/posts/' + pid, {}, 'refreshPage', {});
+		},
+
+		editPost(pid){
+			var post = {
+				title: this.getTitle(pid),
+				subtitle: this.getSubtitle(pid),
+				content: this.getContent(pid),
+			};
+
+			this.requestApi('put', '/api/v1/posts/' + pid, post, 'refreshPage', {});
+		},
+
+		getTitle(pid) {
+			return $('input[id="title-' + pid + '"]').val();
+		},
+
+		getSubtitle(pid) {
+			return $('input[id="subtitle-' + pid + '"]').val();
+		},
+
+		getContent(pid) {
+			return $('textarea[id="content-' + pid + '"]').val();
+		},
+
 		postView(pid) {
 			window.location.href = window.location.origin + '/posts/' + pid;
 		},
