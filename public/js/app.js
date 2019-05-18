@@ -1923,11 +1923,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      formComment: [{
+      formComment: {
         content: '',
         created_id: '',
         parent_id: ''
-      }]
+      },
+      accessToken: '',
+      accessTokenId: '',
+      clientId: '',
+      clientName: '',
+      tokens: []
     };
   },
   props: ['comments', 'user_id', 'post_id'],
@@ -1950,9 +1955,6 @@ __webpack_require__.r(__webpack_exports__);
       return this.formComment.parent_id;
     },
     getUsername: function getUsername(o, args) {
-      console.log('getUsername');
-      console.log(o);
-      console.log(args);
       $('span[id="comment_' + args.id + '"]').text(o.data.name);
     },
     setParentId: function setParentId() {
@@ -1963,11 +1965,6 @@ __webpack_require__.r(__webpack_exports__);
       this.formComment.created_id = parseInt(this.user_id);
     },
     setUsername: function setUsername(cid, uid) {
-      // axios.get('/api/v1/users/' + uid).then(function(resp) {
-      // 	document.getElementById('comment_' + cid).textContent = resp.data.name;
-      // }).catch(function(e) {
-      // 	console.log(e);
-      // });
       this.requestApi('get', '/api/v1/users/' + uid, {}, 'getUsername', {
         id: cid
       });
