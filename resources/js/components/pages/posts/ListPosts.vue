@@ -7,7 +7,44 @@
 				</h1>
 			</div>
 			<div class="col-md-2">
-				<a class="btn btn-primary float-lg-right" href="#" role="button">Create</a>
+				<a class="btn btn-primary float-lg-right" href="#" role="button" data-toggle="modal" data-target="#createPostModal">Create</a>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="createPostModal" tabindex="-1" role="dialog" aria-labelledby="createPostTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="createPostTitle">Create new post</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form>
+								<div class="form-group">
+									<label for="title">Title</label>
+									<input type="text" class="form-control" v-model="create.title" id="title" aria-describedby="titleHelp" placeholder="Enter title" maxlength="50" required>
+									<small id="titleHelp" class="form-text text-muted">Tipe a title.</small>
+								</div>
+								<div class="form-group">
+									<label for="subtitle">subtitle</label>
+									<input type="text" class="form-control" v-model="create.subtitle" id="subtitle" aria-describedby="subtitleHelp" placeholder="Enter subtitle" maxlength="50" required>
+									<small id="subtitleHelp" class="form-text text-muted">Tipe a subtitle.</small>
+								</div>
+								<div class="form-group">
+									<label for="content">Content</label>
+									<textarea class="form-control rounded-0" v-model="create.content" id="content" aria-describedby="contentHelp" placeholder="Content" rows="6" maxlength="255" required></textarea>
+									<small id="contentHelp" class="form-text text-muted">Tipe a content.</small>
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="clearCreateForm()">Cancel</button>
+							<button type="button" class="btn btn-primary" v-on:click="createUser()">Create</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -74,7 +111,7 @@
 													</div>
 													<div class="form-group">
 														<label :for="'content-' + post.id">Content</label>
-														<textarea class="form-control rounded-0" :id="'content-' + post.id" aria-describedby="subtitleHelp" placeholder="Content" rows="6" maxlength="50" v-bind:value="post.content" required></textarea>
+														<textarea class="form-control rounded-0" :id="'content-' + post.id" aria-describedby="contentHelp" placeholder="Content" rows="6" maxlength="255" v-bind:value="post.content" required></textarea>
 														<small id="contentHelp" class="form-text text-muted">Tipe a content.</small>
 													</div>
 												</form>
@@ -125,6 +162,7 @@ export default {
 			clientId: '',
 			clientName: '',
 			tokens: [],
+			create: {},
 		};
 	},
 
@@ -142,6 +180,37 @@ export default {
 	},
 
 	methods: {
+		clearCreateForm() {
+			this.clearTitle();
+			this.clearSubtitle();
+			this.clearContent();
+		},
+
+		createUser() {
+			this.requestApi('post', '/api/v1/posts/', {
+				title: this.create.title,
+				subtitle: this.create.subtitle,
+				content: this.create.content,
+				created_id: this.user_id
+			}, 'refreshPage', {});
+		},
+
+		clearTitle() {
+			$('input[id="title"]').val('');
+		},
+
+		clearSubtitle() {
+			$('input[id="subtitle"]').val('');
+		},
+
+		clearContent() {
+			$('textarea[id="content"]').val('');
+		},
+
+		delPost(pid) {
+			this.requestApi('delete', '/api/v1/posts/' + pid, {}, 'refreshPage', {});
+		},
+
 		delUser(pid) {
 			this.requestApi('put', '/api/v1/posts/' + pid, {}, 'refreshPage', {});
 		},
@@ -151,6 +220,7 @@ export default {
 				title: this.getTitle(pid),
 				subtitle: this.getSubtitle(pid),
 				content: this.getContent(pid),
+				modified_id: this.user_id
 			};
 
 			this.requestApi('put', '/api/v1/posts/' + pid, post, 'refreshPage', {});

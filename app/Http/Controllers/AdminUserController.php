@@ -69,7 +69,5 @@ class AdminUserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-
-        return $user;
     }
 }

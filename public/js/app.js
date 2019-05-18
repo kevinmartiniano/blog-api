@@ -2219,6 +2219,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2226,7 +2263,8 @@ __webpack_require__.r(__webpack_exports__);
       accessTokenId: '',
       clientId: '',
       clientName: '',
-      tokens: []
+      tokens: [],
+      create: {}
     };
   },
   props: ['posts', 'user_id'],
@@ -2237,6 +2275,31 @@ __webpack_require__.r(__webpack_exports__);
     this.getUserNames();
   },
   methods: {
+    clearCreateForm: function clearCreateForm() {
+      this.clearTitle();
+      this.clearSubtitle();
+      this.clearContent();
+    },
+    createUser: function createUser() {
+      this.requestApi('post', '/api/v1/posts/', {
+        title: this.create.title,
+        subtitle: this.create.subtitle,
+        content: this.create.content,
+        created_id: this.user_id
+      }, 'refreshPage', {});
+    },
+    clearTitle: function clearTitle() {
+      $('input[id="title"]').val('');
+    },
+    clearSubtitle: function clearSubtitle() {
+      $('input[id="subtitle"]').val('');
+    },
+    clearContent: function clearContent() {
+      $('textarea[id="content"]').val('');
+    },
+    delPost: function delPost(pid) {
+      this.requestApi('delete', '/api/v1/posts/' + pid, {}, 'refreshPage', {});
+    },
     delUser: function delUser(pid) {
       this.requestApi('put', '/api/v1/posts/' + pid, {}, 'refreshPage', {});
     },
@@ -2244,7 +2307,8 @@ __webpack_require__.r(__webpack_exports__);
       var post = {
         title: this.getTitle(pid),
         subtitle: this.getSubtitle(pid),
-        content: this.getContent(pid)
+        content: this.getContent(pid),
+        modified_id: this.user_id
       };
       this.requestApi('put', '/api/v1/posts/' + pid, post, 'refreshPage', {});
     },
@@ -40467,12 +40531,214 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._m(0),
+    _c("div", { staticClass: "row" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          attrs: {
+            id: "createPostModal",
+            tabindex: "-1",
+            role: "dialog",
+            "aria-labelledby": "createPostTitle",
+            "aria-hidden": "true"
+          }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "modal-dialog modal-dialog-centered",
+              attrs: { role: "document" }
+            },
+            [
+              _c("div", { staticClass: "modal-content" }, [
+                _vm._m(2),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" }, [
+                  _c("form", [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "title" } }, [
+                        _vm._v("Title")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.create.title,
+                            expression: "create.title"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "title",
+                          "aria-describedby": "titleHelp",
+                          placeholder: "Enter title",
+                          maxlength: "50",
+                          required: ""
+                        },
+                        domProps: { value: _vm.create.title },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.create, "title", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "small",
+                        {
+                          staticClass: "form-text text-muted",
+                          attrs: { id: "titleHelp" }
+                        },
+                        [_vm._v("Tipe a title.")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "subtitle" } }, [
+                        _vm._v("subtitle")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.create.subtitle,
+                            expression: "create.subtitle"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "subtitle",
+                          "aria-describedby": "subtitleHelp",
+                          placeholder: "Enter subtitle",
+                          maxlength: "50",
+                          required: ""
+                        },
+                        domProps: { value: _vm.create.subtitle },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.create,
+                              "subtitle",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "small",
+                        {
+                          staticClass: "form-text text-muted",
+                          attrs: { id: "subtitleHelp" }
+                        },
+                        [_vm._v("Tipe a subtitle.")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "content" } }, [
+                        _vm._v("Content")
+                      ]),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.create.content,
+                            expression: "create.content"
+                          }
+                        ],
+                        staticClass: "form-control rounded-0",
+                        attrs: {
+                          id: "content",
+                          "aria-describedby": "contentHelp",
+                          placeholder: "Content",
+                          rows: "6",
+                          maxlength: "255",
+                          required: ""
+                        },
+                        domProps: { value: _vm.create.content },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.create, "content", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "small",
+                        {
+                          staticClass: "form-text text-muted",
+                          attrs: { id: "contentHelp" }
+                        },
+                        [_vm._v("Tipe a content.")]
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary",
+                      attrs: { type: "button", "data-dismiss": "modal" },
+                      on: {
+                        click: function($event) {
+                          return _vm.clearCreateForm()
+                        }
+                      }
+                    },
+                    [_vm._v("Cancel")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.createUser()
+                        }
+                      }
+                    },
+                    [_vm._v("Create")]
+                  )
+                ])
+              ])
+            ]
+          )
+        ]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12" }, [
         _c("table", { staticClass: "table table-hover" }, [
-          _vm._m(1),
+          _vm._m(3),
           _vm._v(" "),
           _c(
             "tbody",
@@ -40503,7 +40769,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._m(2, true)]
+                    [_vm._m(4, true)]
                   ),
                   _vm._v(" "),
                   _c(
@@ -40515,7 +40781,7 @@ var render = function() {
                         "data-target": "#editPostModal-" + post.id
                       }
                     },
-                    [_vm._m(3, true)]
+                    [_vm._m(5, true)]
                   ),
                   _vm._v(" "),
                   _c(
@@ -40527,7 +40793,7 @@ var render = function() {
                         "data-target": "#delConfirm-" + post.id
                       }
                     },
-                    [_vm._m(4, true)]
+                    [_vm._m(6, true)]
                   ),
                   _vm._v(" "),
                   _c(
@@ -40551,7 +40817,7 @@ var render = function() {
                         },
                         [
                           _c("div", { staticClass: "modal-content" }, [
-                            _vm._m(5, true),
+                            _vm._m(7, true),
                             _vm._v(" "),
                             _c("div", { staticClass: "modal-body" }, [
                               _c("form", [
@@ -40626,10 +40892,10 @@ var render = function() {
                                     staticClass: "form-control rounded-0",
                                     attrs: {
                                       id: "content-" + post.id,
-                                      "aria-describedby": "subtitleHelp",
+                                      "aria-describedby": "contentHelp",
                                       placeholder: "Content",
                                       rows: "6",
-                                      maxlength: "50",
+                                      maxlength: "255",
                                       required: ""
                                     },
                                     domProps: { value: post.content }
@@ -40701,7 +40967,7 @@ var render = function() {
                         },
                         [
                           _c("div", { staticClass: "modal-content" }, [
-                            _vm._m(6, true),
+                            _vm._m(8, true),
                             _vm._v(" "),
                             _c("div", { staticClass: "modal-body" }, [
                               _vm._v(
@@ -40756,21 +41022,53 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-10" }, [
-        _c("h1", [_vm._v("\n\t\t\t\tList Posts\n\t\t\t")])
-      ]),
+    return _c("div", { staticClass: "col-md-10" }, [
+      _c("h1", [_vm._v("\n\t\t\t\tList Posts\n\t\t\t")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-2" }, [
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-primary float-lg-right",
+          attrs: {
+            href: "#",
+            role: "button",
+            "data-toggle": "modal",
+            "data-target": "#createPostModal"
+          }
+        },
+        [_vm._v("Create")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "createPostTitle" } },
+        [_vm._v("Create new post")]
+      ),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-2" }, [
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-primary float-lg-right",
-            attrs: { href: "#", role: "button" }
-          },
-          [_vm._v("Create")]
-        )
-      ])
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
     ])
   },
   function() {
