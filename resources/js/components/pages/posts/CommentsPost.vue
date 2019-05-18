@@ -53,48 +53,154 @@
 
 		props: [
 			'comments',
-			'user_id'
+			'user_id',
+			'post_id',
 		],
 
 		ready() {
-			//
+			this.setParentId();
+			this.setCreatedId();
 		},
 
 		mounted() {
-			//
+			this.setParentId();
+			this.setCreatedId();
 		},
 
 		methods: {
-			setUsername: function(cid, uid) {
-				axios.get('/api/v1/users/' + uid).then(function(resp) {
-					document.getElementById('comment_' + cid).textContent = resp.data.name;
-				}).catch(function(e) {
-					console.log(e);
-				});
+			getComment() {
+				return this.formComment.comment;
 			},
 
-			sendComment() {
-				this.setParentId();
-				this.setCreatedId();
+			getCreatedId() {
+				return this.formComment.created_id;
+			},
 
-				axios.post('/api/v1/comments/', {
-					content: this.formComment.comment,
-					created_id: this.formComment.created_id,
-					parent_id: this.formComment.parent_id
-				}).then(function(resp) {
-					location.reload();
-				}).catch(function(e) {
-					console.log(e);
-				});
+			getParentId() {
+				return this.formComment.parent_id;
+			},
+
+			getUsername(o, args) {
+				$('span[id="comment_' + args.id + '"]').text(o.data.name);
 			},
 
 			setParentId() {
-				this.formComment.parent_id = parseInt(window.location.pathname.split('/')[2]);
+				this.formComment.parent_id = parseInt(this.post_id);
 			},
 
 			// TODO: get real user
 			setCreatedId() {
 				this.formComment.created_id = parseInt(this.user_id);
+			},
+
+			setUsername: function(cid, uid) {
+				this.requestApi('get', '/api/v1/users/' + uid, {}, 'getUsername', {
+					id: cid,
+				});
+			},
+
+			sendComment() {
+				this.requestApi('post', '/api/v1/comments/', {
+					content: this.getComment(),
+					created_id: this.getCreatedId(),
+					parent_id: this.getParentId(),
+				}, 'refreshPage', {});
+			},
+
+			refreshPage(o, args) {
+				location.reload();
+			},
+
+			requestApi(method, uri, form, exec, args) {
+				this.getClients(method, uri, form, exec, args);
+			},
+
+			getClients(method, uri, form, exec, args) {
+				axios.get('/oauth/clients').then(response => {
+					if(response.data.length == 0) {
+						this.createClient(method, uri, form, exec, args);
+					} else {
+						this.clientId = response.data[0].id;
+						this.clientName = response.data[0].name;
+						this.setNewToken(method, uri, form, exec, args);
+					}
+				}).catch(err => {
+					if(err.response.status == 401) {
+						window.location.href = window.location.origin;
+					} else {
+						console.error(e);
+					}
+				});
+			},
+
+			createClient(method, uri, form, exec, args) {
+				axios.post('/oauth/clients', {
+					name: 'user ' + this.user_id,
+					redirect: window.location.origin
+				}).then(response => {
+					this.getClients(method, uri, form, exec, args);
+				}).catch (error => {
+					console.error(error);
+				});
+			},
+
+			/*
+			* Creating new personal access token for the user.
+			*/
+			setNewToken(method, uri, form, exec, args) {
+				axios.post('/oauth/personal-access-tokens', {
+					name: this.clientName,
+					scopes: []
+				}).then(response => {
+					this.accessToken = response.data.accessToken;
+					this.accessTokenId = response.data.token.id;
+
+					this.sendRequest(method, uri, form, exec, args);
+				}).catch(error => {
+					console.error(error);
+				});
+			},
+
+			sendRequest(method, uri, form, exec, args) {
+				if(method == 'get' || method == 'delete') {
+					axios[method](uri, {
+						headers: {
+							'Authorization': "Bearer " + this.accessToken,
+							'Content-Type': "application/json",
+							'Accept': "application/json",
+						}
+					}).then(resp => {
+						this.revoke();
+						this[exec](resp, args);
+					}).catch(e => {
+						console.error(e);
+					});
+				} else {
+					axios[method](uri, form, {
+						headers: {
+							'Authorization': "Bearer " + this.accessToken,
+							'Content-Type': "application/json",
+							'Accept': "application/json",
+						}
+					}).then(resp => {
+						this.revoke();
+						this[exec](resp, args);
+					}).catch(e => {
+						console.error(e);
+					});
+				}
+			},
+
+			/*
+			* Deleting last created token.
+			*/
+			revoke() {
+				axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId).then(resp => {
+					this.accessTokenId = '';
+					this.accessToken = '';
+					this.clientId = '';
+					this.clientname = '';
+				});
 			},
 		},
 	}

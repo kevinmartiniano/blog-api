@@ -1930,125 +1930,158 @@ __webpack_require__.r(__webpack_exports__);
       }]
     };
   },
-  props: ['comments', 'user_id'],
-  ready: function ready() {//
+  props: ['comments', 'user_id', 'post_id'],
+  ready: function ready() {
+    this.setParentId();
+    this.setCreatedId();
   },
-  mounted: function mounted() {//
+  mounted: function mounted() {
+    this.setParentId();
+    this.setCreatedId();
   },
   methods: {
-    setUsername: function setUsername(cid, uid) {
-      axios.get('/api/v1/users/' + uid).then(function (resp) {
-        document.getElementById('comment_' + cid).textContent = resp.data.name;
-      }).catch(function (e) {
-        console.log(e);
-      });
+    getComment: function getComment() {
+      return this.formComment.comment;
     },
-    sendComment: function sendComment() {
-      this.setParentId();
-      this.setCreatedId();
-      axios.post('/api/v1/comments/', {
-        content: this.formComment.comment,
-        created_id: this.formComment.created_id,
-        parent_id: this.formComment.parent_id
-      }).then(function (resp) {
-        location.reload();
-      }).catch(function (e) {
-        console.log(e);
-      });
+    getCreatedId: function getCreatedId() {
+      return this.formComment.created_id;
+    },
+    getParentId: function getParentId() {
+      return this.formComment.parent_id;
+    },
+    getUsername: function getUsername(o, args) {
+      console.log('getUsername');
+      console.log(o);
+      console.log(args);
+      $('span[id="comment_' + args.id + '"]').text(o.data.name);
     },
     setParentId: function setParentId() {
-      this.formComment.parent_id = parseInt(window.location.pathname.split('/')[2]);
+      this.formComment.parent_id = parseInt(this.post_id);
     },
     // TODO: get real user
     setCreatedId: function setCreatedId() {
       this.formComment.created_id = parseInt(this.user_id);
-    }
-  }
-});
+    },
+    setUsername: function setUsername(cid, uid) {
+      // axios.get('/api/v1/users/' + uid).then(function(resp) {
+      // 	document.getElementById('comment_' + cid).textContent = resp.data.name;
+      // }).catch(function(e) {
+      // 	console.log(e);
+      // });
+      this.requestApi('get', '/api/v1/users/' + uid, {}, 'getUsername', {
+        id: cid
+      });
+    },
+    sendComment: function sendComment() {
+      this.requestApi('post', '/api/v1/comments/', {
+        content: this.getComment(),
+        created_id: this.getCreatedId(),
+        parent_id: this.getParentId()
+      }, 'refreshPage', {});
+    },
+    refreshPage: function refreshPage(o, args) {
+      location.reload();
+    },
+    requestApi: function requestApi(method, uri, form, exec, args) {
+      this.getClients(method, uri, form, exec, args);
+    },
+    getClients: function getClients(method, uri, form, exec, args) {
+      var _this = this;
 
-/***/ }),
+      axios.get('/oauth/clients').then(function (response) {
+        if (response.data.length == 0) {
+          _this.createClient(method, uri, form, exec, args);
+        } else {
+          _this.clientId = response.data[0].id;
+          _this.clientName = response.data[0].name;
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/posts/CreatePost.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/posts/CreatePost.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+          _this.setNewToken(method, uri, form, exec, args);
+        }
+      }).catch(function (err) {
+        if (err.response.status == 401) {
+          window.location.href = window.location.origin;
+        } else {
+          console.error(e);
+        }
+      });
+    },
+    createClient: function createClient(method, uri, form, exec, args) {
+      var _this2 = this;
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      post: []
-    };
-  },
-  props: ['user_id'],
-  ready: function ready() {//
-  },
-  mounted: function mounted() {//
-  },
-  methods: {
-    createPost: function createPost() {
-      var post = this.post;
-      post.created_id = this.user_id;
+      axios.post('/oauth/clients', {
+        name: 'user ' + this.user_id,
+        redirect: window.location.origin
+      }).then(function (response) {
+        _this2.getClients(method, uri, form, exec, args);
+      }).catch(function (error) {
+        console.error(error);
+      });
+    },
 
-      if (post.created_id != '') {
-        axios.post('/api/v1/posts/', {
-          title: post.title,
-          subtitle: post.subtitle,
-          content: post.content,
-          created_id: post.created_id
-        }).then(function (response) {
-          window.location.href = window.location.origin + '/posts/' + response.data.id;
-        }).catch(function (error) {
-          console.debug(error);
+    /*
+    * Creating new personal access token for the user.
+    */
+    setNewToken: function setNewToken(method, uri, form, exec, args) {
+      var _this3 = this;
+
+      axios.post('/oauth/personal-access-tokens', {
+        name: this.clientName,
+        scopes: []
+      }).then(function (response) {
+        _this3.accessToken = response.data.accessToken;
+        _this3.accessTokenId = response.data.token.id;
+
+        _this3.sendRequest(method, uri, form, exec, args);
+      }).catch(function (error) {
+        console.error(error);
+      });
+    },
+    sendRequest: function sendRequest(method, uri, form, exec, args) {
+      var _this4 = this;
+
+      if (method == 'get' || method == 'delete') {
+        axios[method](uri, {
+          headers: {
+            'Authorization': "Bearer " + this.accessToken,
+            'Content-Type': "application/json",
+            'Accept': "application/json"
+          }
+        }).then(function (resp) {
+          _this4.revoke();
+
+          _this4[exec](resp, args);
+        }).catch(function (e) {
+          console.error(e);
         });
       } else {
-        alert('You are unlogged in this site.');
+        axios[method](uri, form, {
+          headers: {
+            'Authorization': "Bearer " + this.accessToken,
+            'Content-Type': "application/json",
+            'Accept': "application/json"
+          }
+        }).then(function (resp) {
+          _this4.revoke();
+
+          _this4[exec](resp, args);
+        }).catch(function (e) {
+          console.error(e);
+        });
       }
+    },
+
+    /*
+    * Deleting last created token.
+    */
+    revoke: function revoke() {
+      var _this5 = this;
+
+      axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId).then(function (resp) {
+        _this5.accessTokenId = '';
+        _this5.accessToken = '';
+        _this5.clientId = '';
+        _this5.clientname = '';
+      });
     }
   }
 });
@@ -2337,7 +2370,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     refreshPage: function refreshPage(o, args) {
-      window.location.href = window.location.origin + '/posts/';
+      location.reload();
     },
     requestApi: function requestApi(method, uri, form, exec, args) {
       this.getClients(method, uri, form, exec, args);
@@ -2580,7 +2613,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     refreshPage: function refreshPage(o, args) {
-      window.location.href = window.location.origin + '/users/' + this.user.id;
+      location.reload();
     },
     requestApi: function requestApi(method, uri, form, exec, args) {
       this.getClients(method, uri, form, exec, args);
@@ -2937,7 +2970,7 @@ __webpack_require__.r(__webpack_exports__);
       this.requestApi('delete', '/api/v1/users/' + uid, {}, 'refreshPage', {});
     },
     refreshPage: function refreshPage(o, args) {
-      window.location.href = window.location.origin + '/users/';
+      location.reload();
     },
     requestApi: function requestApi(method, uri, form, exec, args) {
       this.getClients(method, uri, form, exec, args);
@@ -40283,198 +40316,6 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/posts/CreatePost.vue?vue&type=template&id=1bfbd50e&":
-/*!*************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/posts/CreatePost.vue?vue&type=template&id=1bfbd50e& ***!
-  \*************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._m(0),
-    _vm._v(" "),
-    _c(
-      "form",
-      {
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.createPost($event)
-          }
-        }
-      },
-      [
-        _c("div", { staticClass: "control-group" }, [
-          _c(
-            "div",
-            { staticClass: "form-group floating-label-form-group controls" },
-            [
-              _c("label", [_vm._v("Title")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.post.title,
-                    expression: "post.title"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  placeholder: "Title",
-                  id: "title",
-                  name: "title",
-                  required: "required",
-                  "data-validation-required-message": "Please enter a title."
-                },
-                domProps: { value: _vm.post.title },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.post, "title", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("p", { staticClass: "help-block text-danger" })
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "control-group" }, [
-          _c(
-            "div",
-            { staticClass: "form-group floating-label-form-group controls" },
-            [
-              _c("label", [_vm._v("Subtitle")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.post.subtitle,
-                    expression: "post.subtitle"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  type: "text",
-                  placeholder: "Subtitle",
-                  id: "subtitle",
-                  name: "subtitle",
-                  required: "required",
-                  "data-validation-required-message": "Please enter a subtitle."
-                },
-                domProps: { value: _vm.post.subtitle },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.post, "subtitle", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("p", { staticClass: "help-block text-danger" })
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "control-group" }, [
-          _c(
-            "div",
-            { staticClass: "form-group floating-label-form-group controls" },
-            [
-              _c("label", [_vm._v("Content")]),
-              _vm._v(" "),
-              _c("textarea", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.post.content,
-                    expression: "post.content"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  rows: "5",
-                  placeholder: "Content",
-                  id: "content",
-                  name: "content",
-                  required: "required",
-                  "data-validation-required-message": "Please enter a content."
-                },
-                domProps: { value: _vm.post.content },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.post, "content", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("p", { staticClass: "help-block text-danger" })
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "success" }),
-        _vm._v(" "),
-        _vm._m(1)
-      ]
-    )
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("p"),
-      _c("h1", [_vm._v("\n\t\t\t\tCreate a new Post!\n\t\t\t")]),
-      _vm._v(" "),
-      _c("p"),
-      _vm._v(" "),
-      _c("p", [_vm._v("\n\t\t\tForm to create a new post.\n\t\t")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { id: "createPost" } },
-        [_vm._v("Send")]
-      )
-    ])
-  }
-]
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/posts/HeaderPosts.vue?vue&type=template&id=88e54138&":
 /*!**************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/posts/HeaderPosts.vue?vue&type=template&id=88e54138& ***!
@@ -55446,7 +55287,6 @@ Vue.component('passport-personal-access-tokens', __webpack_require__(/*! ./compo
 Vue.component('form-contact-mail', __webpack_require__(/*! ./components/pages/contact/FormContactMail.vue */ "./resources/js/components/pages/contact/FormContactMail.vue").default);
 Vue.component('header-posts', __webpack_require__(/*! ./components/pages/posts/HeaderPosts.vue */ "./resources/js/components/pages/posts/HeaderPosts.vue").default);
 Vue.component('comments-post', __webpack_require__(/*! ./components/pages/posts/CommentsPost.vue */ "./resources/js/components/pages/posts/CommentsPost.vue").default);
-Vue.component('create-post', __webpack_require__(/*! ./components/pages/posts/CreatePost.vue */ "./resources/js/components/pages/posts/CreatePost.vue").default);
 Vue.component('list-posts', __webpack_require__(/*! ./components/pages/posts/ListPosts.vue */ "./resources/js/components/pages/posts/ListPosts.vue").default);
 Vue.component('list-users', __webpack_require__(/*! ./components/pages/users/ListUsers.vue */ "./resources/js/components/pages/users/ListUsers.vue").default);
 Vue.component('detail-users', __webpack_require__(/*! ./components/pages/users/DetailUsers.vue */ "./resources/js/components/pages/users/DetailUsers.vue").default);
@@ -55722,75 +55562,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CommentsPost_vue_vue_type_template_id_2dc758f4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CommentsPost_vue_vue_type_template_id_2dc758f4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
-/***/ "./resources/js/components/pages/posts/CreatePost.vue":
-/*!************************************************************!*\
-  !*** ./resources/js/components/pages/posts/CreatePost.vue ***!
-  \************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _CreatePost_vue_vue_type_template_id_1bfbd50e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CreatePost.vue?vue&type=template&id=1bfbd50e& */ "./resources/js/components/pages/posts/CreatePost.vue?vue&type=template&id=1bfbd50e&");
-/* harmony import */ var _CreatePost_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CreatePost.vue?vue&type=script&lang=js& */ "./resources/js/components/pages/posts/CreatePost.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _CreatePost_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _CreatePost_vue_vue_type_template_id_1bfbd50e___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _CreatePost_vue_vue_type_template_id_1bfbd50e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/pages/posts/CreatePost.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/pages/posts/CreatePost.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/components/pages/posts/CreatePost.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CreatePost_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./CreatePost.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/posts/CreatePost.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CreatePost_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/pages/posts/CreatePost.vue?vue&type=template&id=1bfbd50e&":
-/*!*******************************************************************************************!*\
-  !*** ./resources/js/components/pages/posts/CreatePost.vue?vue&type=template&id=1bfbd50e& ***!
-  \*******************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CreatePost_vue_vue_type_template_id_1bfbd50e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./CreatePost.vue?vue&type=template&id=1bfbd50e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/posts/CreatePost.vue?vue&type=template&id=1bfbd50e&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CreatePost_vue_vue_type_template_id_1bfbd50e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CreatePost_vue_vue_type_template_id_1bfbd50e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

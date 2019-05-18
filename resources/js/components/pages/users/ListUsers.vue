@@ -253,7 +253,7 @@ export default {
 		},
 
 		refreshPage(o, args) {
-			window.location.href = window.location.origin + '/users/';
+			location.reload();
 		},
 
 		requestApi(method, uri, form, exec, args) {

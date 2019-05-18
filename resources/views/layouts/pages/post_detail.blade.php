@@ -22,9 +22,9 @@
 					<hr />
 
 					@guest
-						<comments-post :comments="{{ $post->comments }}" user_id=""></comments-post>
+						<comments-post :comments="{{ $post->comments }}" user_id="" post_id=""></comments-post>
 					@else
-						<comments-post :comments="{{ $post->comments }}" user_id="{{ Auth::user()->id }}"></comments-post>
+						<comments-post :comments="{{ $post->comments }}" user_id="{{ Auth::user()->id }}" post_id="{{ $post->id }}"></comments-post>
 					@endguest
 
 					<p>Placeholder text by

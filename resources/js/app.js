@@ -56,11 +56,6 @@ Vue.component(
 );
 
 Vue.component(
-    'create-post',
-    require('./components/pages/posts/CreatePost.vue').default
-);
-
-Vue.component(
     'list-posts',
     require('./components/pages/posts/ListPosts.vue').default
 );

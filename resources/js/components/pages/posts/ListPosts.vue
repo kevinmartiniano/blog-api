@@ -257,7 +257,7 @@ export default {
 		},
 
 		refreshPage(o, args) {
-			window.location.href = window.location.origin + '/posts/';
+			location.reload();
 		},
 
 		requestApi(method, uri, form, exec, args) {

@@ -138,7 +138,7 @@ export default {
 		},
 
 		refreshPage(o, args) {
-			window.location.href = window.location.origin + '/users/' + this.user.id;
+			location.reload();
 		},
 
 		requestApi(method, uri, form, exec, args) {
