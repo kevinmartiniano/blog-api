@@ -52,7 +52,7 @@ class AdminPostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $this->authorize('update', Post::class);
+        $this->authorize('update', $post);
         
         $post->update($request->all());
         return $post;
@@ -66,7 +66,7 @@ class AdminPostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $this->authorize('delete', Post::class);
+        $this->authorize('delete', $post);
         $post->delete();
     }
 }
