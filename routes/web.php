@@ -21,17 +21,17 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/', 'HomeController@index');
 
-
+Route::resources([
+    'users' => 'UserController',
+    'posts' => 'PostController',
+], [
+    'only' => [
+        'index', 'show'
+    ],
+]);
 
 Route::get('/about', function () {
     return view('layouts.pages.about');
 });
-
-Route::resources([
-    'users' => 'UserController',
-    'posts' => 'PostController',
-]);
-
-Route::get('/admin/posts', 'PostController@create');
 
 Route::get('/contact', 'ContactController@create');

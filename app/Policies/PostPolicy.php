@@ -19,7 +19,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        //
+        return true;
     }
 
     /**
@@ -30,7 +30,11 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        //
+        if($user->user_type_id == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -42,7 +46,11 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        //
+        if($user->user_type_id == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -54,7 +62,11 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        //
+        if($user->user_type_id == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -64,7 +76,7 @@ class PostPolicy
      * @param  \App\Post  $post
      * @return mixed
      */
-    public function restore(User $user, Post $post)
+    public function restore(?User $user, Post $post)
     {
         //
     }
@@ -78,6 +90,10 @@ class PostPolicy
      */
     public function forceDelete(User $user, Post $post)
     {
-        //
+        if($user->user_type_id == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

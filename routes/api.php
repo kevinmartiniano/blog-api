@@ -17,13 +17,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware("auth:api")->prefix('v1')->group(function () {
+Route::prefix('v1')->group(function () {
     Route::resources([
         'posts' => 'AdminPostController',
         'comments' => 'CommentController',
-        'likes' => 'LikeController',
         'users' => 'AdminUserController',
         'user-types' => 'UserTypeController',
+    ], [
+        'except' => ['create', 'edit'],
     ]);
 });
 
