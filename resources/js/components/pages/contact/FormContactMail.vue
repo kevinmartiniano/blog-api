@@ -45,31 +45,123 @@
 </template>
 
 <script>
-	export default {
-		/*
-		* The component's data.
-		*/
-		data() {
-			return {
-				contact: [],
+export default {
+	/*
+	* The component's data.
+	*/
+	data() {
+		return {
+			contact: [],
+		};
+	},
+
+	methods: {
+		sendMessage(){
+			var form = {
+				name: this.contact.name,
+				email: this.contact.email,
+				phone_number: this.contact.phone_number,
+				message: this.contact.message,
 			};
+
+			this.requestApi('post', '/api/v1/contacts/', form, 'refreshPage', {});
 		},
 
-		methods: {
-			sendMessage(){
-				var contact = this.contact;
+		refreshPage(o, args) {
+			location.reload();
+		},
 
-				axios.post('/api/v1/contact/', {
-					name: contact.name,
-					email: contact.email,
-					phone_number: contact.phone_number,
-					message: contact.message
-				}).then(response => {
-					window.location.href = '/contact';
-				}).catch(error => {
-					console.debug(error);
+		requestApi(method, uri, form, exec, args) {
+			this.getClients(method, uri, form, exec, args);
+		},
+
+		getClients(method, uri, form, exec, args) {
+			axios.get('/oauth/clients').then(response => {
+				if(response.data.length == 0) {
+					this.createClient(method, uri, form, exec, args);
+				} else {
+					this.clientId = response.data[0].id;
+					this.clientName = response.data[0].name;
+					this.setNewToken(method, uri, form, exec, args);
+				}
+			}).catch(err => {
+				if(err.response.status == 401) {
+					window.location.href = window.location.origin;
+				} else {
+					console.error(e);
+				}
+			});
+		},
+
+		createClient(method, uri, form, exec, args) {
+			axios.post('/oauth/clients', {
+				name: 'user ' + this.user_id,
+				redirect: window.location.origin
+			}).then(response => {
+				this.getClients(method, uri, form, exec, args);
+			}).catch (error => {
+				console.error(error);
+			});
+		},
+
+		/*
+		 * Creating new personal access token for the user.
+		 */
+		setNewToken(method, uri, form, exec, args) {
+			axios.post('/oauth/personal-access-tokens', {
+				name: this.clientName,
+				scopes: []
+			}).then(response => {
+				this.accessToken = response.data.accessToken;
+				this.accessTokenId = response.data.token.id;
+
+				this.sendRequest(method, uri, form, exec, args);
+			}).catch(error => {
+				console.error(error);
+			});
+		},
+
+		sendRequest(method, uri, form, exec, args) {
+			if(method == 'get' || method == 'delete') {
+				axios[method](uri, {
+					headers: {
+						'Authorization': "Bearer " + this.accessToken,
+						'Content-Type': "application/json",
+						'Accept': "application/json",
+					}
+				}).then(resp => {
+					this.revoke();
+					this[exec](resp, args);
+				}).catch(e => {
+					console.error(e);
 				});
-			},
+			} else {
+				axios[method](uri, form, {
+					headers: {
+						'Authorization': "Bearer " + this.accessToken,
+						'Content-Type': "application/json",
+						'Accept': "application/json",
+					}
+				}).then(resp => {
+					this.revoke();
+					this[exec](resp, args);
+				}).catch(e => {
+					console.error(e);
+				});
+			}
 		},
-	}
+
+		/*
+		 * Deleting last created token.
+		 */
+		revoke() {
+			axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId).then(resp => {
+				this.accessTokenId = '';
+				this.accessToken = '';
+				this.clientId = '';
+				this.clientname = '';
+			});
+		},
+	},
+}
 </script>

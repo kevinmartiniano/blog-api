@@ -1,12 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Post;
 use Illuminate\Http\Request;
-use App\Like;
+use App\Http\Controllers\Controller;
 
-class LikeController extends Controller
+class PostController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth:api')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,17 +18,7 @@ class LikeController extends Controller
      */
     public function index()
     {
-        return Like::all();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return Post::all();
     }
 
     /**
@@ -33,9 +27,10 @@ class LikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Like $like)
+    public function store(Request $request)
     {
-        $like->create($request->all());
+        $this->authorize('create', Post::class);
+        return Post::create($request->all());
     }
 
     /**
@@ -44,20 +39,9 @@ class LikeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Like $like)
+    public function show(Post $post)
     {
-        return $like;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $post;
     }
 
     /**
@@ -67,11 +51,12 @@ class LikeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Like $like)
+    public function update(Request $request, Post $post)
     {
-        $like->update($request->all());
+        $this->authorize('update', $post);
 
-        return $like;
+        $post->update($request->all());
+        return $post;
     }
 
     /**
@@ -80,8 +65,9 @@ class LikeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Like $like)
+    public function destroy(Post $post)
     {
-        $like->delete();
+        $this->authorize('delete', $post);
+        $post->delete();
     }
 }

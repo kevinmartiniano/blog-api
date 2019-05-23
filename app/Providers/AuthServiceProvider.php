@@ -2,8 +2,17 @@
 
 namespace App\Providers;
 
+use App\Comment;
+use App\Contact;
+use App\Like;
 use App\Post;
+use App\User;
+
+use App\Policies\CommentPolicy;
+use App\Policies\ContactPolicy;
+use App\Policies\LikePolicy;
 use App\Policies\PostPolicy;
+use App\Policies\UserPolicy;
 
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
@@ -18,7 +27,11 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
+        Comment::class => CommentPolicy::class,
+        Contact::class => ContactPolicy::class,
+        Like::class => LikePolicy::class,
         Post::class => PostPolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**

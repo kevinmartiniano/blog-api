@@ -15,13 +15,7 @@
                     <a class="nav-link" href="/about/">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/contact/">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/posts/">Posts List</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/users/">Users List</a>
+                    <a class="nav-link" href="/contact/create">Contact</a>
                 </li>
 
                 <!-- Authentication Links -->
@@ -35,6 +29,12 @@
                     </li>
                 @endif
                 @else
+                    <li class="nav-item">
+                        <a class="nav-link" href="/posts/">Posts List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/">Users List</a>
+                    </li>
                     <li class="nav-item">
                         <a id="nav-link" class="nav-link" href="/users/{{ Auth::user()->id }}">My profile</a>
                     </li>

@@ -1853,16 +1853,116 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     sendMessage: function sendMessage() {
-      var contact = this.contact;
-      axios.post('/api/v1/contact/', {
-        name: contact.name,
-        email: contact.email,
-        phone_number: contact.phone_number,
-        message: contact.message
+      var form = {
+        name: this.contact.name,
+        email: this.contact.email,
+        phone_number: this.contact.phone_number,
+        message: this.contact.message
+      };
+      this.requestApi('post', '/api/v1/contacts/', form, 'refreshPage', {});
+    },
+    refreshPage: function refreshPage(o, args) {
+      location.reload();
+    },
+    requestApi: function requestApi(method, uri, form, exec, args) {
+      this.getClients(method, uri, form, exec, args);
+    },
+    getClients: function getClients(method, uri, form, exec, args) {
+      var _this = this;
+
+      axios.get('/oauth/clients').then(function (response) {
+        if (response.data.length == 0) {
+          _this.createClient(method, uri, form, exec, args);
+        } else {
+          _this.clientId = response.data[0].id;
+          _this.clientName = response.data[0].name;
+
+          _this.setNewToken(method, uri, form, exec, args);
+        }
+      }).catch(function (err) {
+        if (err.response.status == 401) {
+          window.location.href = window.location.origin;
+        } else {
+          console.error(e);
+        }
+      });
+    },
+    createClient: function createClient(method, uri, form, exec, args) {
+      var _this2 = this;
+
+      axios.post('/oauth/clients', {
+        name: 'user ' + this.user_id,
+        redirect: window.location.origin
       }).then(function (response) {
-        window.location.href = '/contact';
+        _this2.getClients(method, uri, form, exec, args);
       }).catch(function (error) {
-        console.debug(error);
+        console.error(error);
+      });
+    },
+
+    /*
+     * Creating new personal access token for the user.
+     */
+    setNewToken: function setNewToken(method, uri, form, exec, args) {
+      var _this3 = this;
+
+      axios.post('/oauth/personal-access-tokens', {
+        name: this.clientName,
+        scopes: []
+      }).then(function (response) {
+        _this3.accessToken = response.data.accessToken;
+        _this3.accessTokenId = response.data.token.id;
+
+        _this3.sendRequest(method, uri, form, exec, args);
+      }).catch(function (error) {
+        console.error(error);
+      });
+    },
+    sendRequest: function sendRequest(method, uri, form, exec, args) {
+      var _this4 = this;
+
+      if (method == 'get' || method == 'delete') {
+        axios[method](uri, {
+          headers: {
+            'Authorization': "Bearer " + this.accessToken,
+            'Content-Type': "application/json",
+            'Accept': "application/json"
+          }
+        }).then(function (resp) {
+          _this4.revoke();
+
+          _this4[exec](resp, args);
+        }).catch(function (e) {
+          console.error(e);
+        });
+      } else {
+        axios[method](uri, form, {
+          headers: {
+            'Authorization': "Bearer " + this.accessToken,
+            'Content-Type': "application/json",
+            'Accept': "application/json"
+          }
+        }).then(function (resp) {
+          _this4.revoke();
+
+          _this4[exec](resp, args);
+        }).catch(function (e) {
+          console.error(e);
+        });
+      }
+    },
+
+    /*
+     * Deleting last created token.
+     */
+    revoke: function revoke() {
+      var _this5 = this;
+
+      axios.delete('/oauth/personal-access-tokens/' + this.accessTokenId).then(function (resp) {
+        _this5.accessTokenId = '';
+        _this5.accessToken = '';
+        _this5.clientId = '';
+        _this5.clientname = '';
       });
     }
   }

@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Post;
+use App\Comment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class AdminPostController extends Controller
+class CommentController extends Controller
 {
     public function __construct() {
         $this->middleware('auth:api')->except(['index', 'show']);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +19,7 @@ class AdminPostController extends Controller
      */
     public function index()
     {
-        return Post::all();
+        return Comment::all();
     }
 
     /**
@@ -28,45 +30,47 @@ class AdminPostController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Post::class);
-        return Post::create($request->all());
+        $this->authorize('create', Comment::class);
+
+        return Comment::create($request->all());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show(Comment $comment)
     {
-        return $post;
+        return $comment;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Comment $comment)
     {
-        $this->authorize('update', $post);
-        
-        $post->update($request->all());
-        return $post;
+        $this->authorize('update', $comment);
+
+        $comment->update($request->all());
+        return $comment;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy(Comment $comment)
     {
-        $this->authorize('delete', $post);
-        $post->delete();
+        $this->authotize('delete', $comment);
+
+        $comment->delete();
     }
 }

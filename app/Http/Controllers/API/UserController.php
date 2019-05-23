@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
 
-class AdminUserController extends Controller
+class UserController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth:api')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,11 +27,13 @@ class AdminUserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, User $user)
     {
-        $request['password'] = Hash::make($request['password']);
+        $this->authorize('create', User::class);
 
-        return User::create($request->all());
+        $request['password'] = Hash::make($request['password']);
+        $user->create($request->all());
+        return $user;
     }
 
     /**
@@ -51,12 +56,13 @@ class AdminUserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->authorize('update', $user);
+
         if($request['password'] != '') {
             $request['password'] = Hash::make($request['password']);
         }
 
         $user->update($request->all());
-
         return $user;
     }
 
@@ -68,6 +74,6 @@ class AdminUserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
+        $this->authorize('delete', $user);
     }
 }

@@ -18,7 +18,6 @@
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-
 Route::get('/', 'HomeController@index');
 
 Route::resources([
@@ -30,8 +29,14 @@ Route::resources([
     ],
 ]);
 
+Route::resources([
+    'contact' => 'ContactController',
+], [
+    'only' => [
+        'create'
+    ],
+]);
+
 Route::get('/about', function () {
     return view('layouts.pages.about');
 });
-
-Route::get('/contact', 'ContactController@create');

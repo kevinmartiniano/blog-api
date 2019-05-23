@@ -1,12 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\UserType;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class UserTypeController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth:api')->except('index', 'show');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,26 +23,16 @@ class UserTypeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, UserType $userType)
+    public function store(Request $request)
     {
-        $userType->create($request->all());
+        $this->authorize('create', UserType::class);
 
-        return $userType;
+        return UserType::create($request->all());
     }
 
     /**
@@ -52,17 +47,6 @@ class UserTypeController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\UserType  $userType
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UserType $userType)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -71,9 +55,9 @@ class UserTypeController extends Controller
      */
     public function update(Request $request, UserType $userType)
     {
-        $userType->update($request->all());
+        $this->authorize('update', $userType);
 
-        return $userType;
+        return $userType->update($request->all());
     }
 
     /**
@@ -84,6 +68,8 @@ class UserTypeController extends Controller
      */
     public function destroy(UserType $userType)
     {
+        $this->authorize('delete', $userType);
+
         $userType->delete();
     }
 }
