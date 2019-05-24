@@ -51,6 +51,11 @@ export default {
 	*/
 	data() {
 		return {
+			accessToken: '',
+			accessTokenId: '',
+			clientId: '',
+			clientName: '',
+			tokens: [],
 			contact: [],
 		};
 	},

@@ -1848,6 +1848,11 @@ __webpack_require__.r(__webpack_exports__);
   */
   data: function data() {
     return {
+      accessToken: '',
+      accessTokenId: '',
+      clientId: '',
+      clientName: '',
+      tokens: [],
       contact: []
     };
   },
