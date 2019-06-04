@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Mail\ContactMe;
-
 use Illuminate\Support\Facades\Mail;
 
+use App\Mail\ContactMe;
 use App\Contact;
 use App\User;
 
@@ -37,10 +36,8 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        $contact = new Contact($request->all());
-        $contact->save();
-
-        Mail::to(User::where('email', '=', env('MAIL_TO_TEST'))->first())->send(new ContactMe($contact));
+        $contact = Contact::create($request->all());
+        Mail::to(User::where('user_type_id', '=', 1)->get())->send(new ContactMe($contact));
 
         return $contact;
     }
