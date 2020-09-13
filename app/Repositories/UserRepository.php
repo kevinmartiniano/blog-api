@@ -3,11 +3,12 @@
 namespace App\Repositories;
 
 use App\Model\User;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserRepository implements UserRepositoryInterface
 {
 
-    private User $model;
+    private $model;
 
     public function __construct(User $user)
     {
@@ -19,7 +20,7 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->find($user->id);
     }
 
-    public function findAll(): ?array
+    public function findAll(): ?Collection
     {
         return $this->model->all();
     }
