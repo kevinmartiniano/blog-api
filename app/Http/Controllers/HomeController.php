@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Post;
+use App\Model\Post;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
