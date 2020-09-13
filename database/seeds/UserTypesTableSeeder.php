@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UserTypesTableSeeder extends Seeder
 {
@@ -11,7 +12,7 @@ class UserTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        // $userTypes = factory(App\UserType::class, 1)->create();
+        // $userTypes = factory(App\Model\UserType::class, 1)->create();
         DB::table('user_types')->insert([
             'name' => 'Admin',
         ]);

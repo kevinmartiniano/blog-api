@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
-use App\Post;
-use App\User;
+use App\Model\Post;
+use App\Model\User;
 
 $factory->define(Post::class, function (Faker $faker) {
     return [

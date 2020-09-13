@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Like;
+use App\Model\Like;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -37,7 +37,7 @@ class LikeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Like  $like
+     * @param  \App\Model\Like  $like
      * @return \Illuminate\Http\Response
      */
     public function show(Like $like)
@@ -49,7 +49,7 @@ class LikeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Like  $like
+     * @param  \App\Model\Like  $like
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Like $like)
@@ -62,7 +62,7 @@ class LikeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Like  $like
+     * @param  \App\Model\Like  $like
      * @return \Illuminate\Http\Response
      */
     public function destroy(Like $like)

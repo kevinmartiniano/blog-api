@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Config;
 
 use PHPUnit\Framework\Exception;
-use App\Contact;
+use App\Model\Contact;
 
 class ContactMe extends Mailable
 {

@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\UserType::class, function (Faker $faker) {
+$factory->define(App\Model\UserType::class, function (Faker $faker) {
     return [
         'name' => 'Admin',
     ];

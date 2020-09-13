@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\UserType;
+use App\Model\UserType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -38,7 +38,7 @@ class UserTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\UserType  $userType
+     * @param  \App\Model\UserType  $userType
      * @return \Illuminate\Http\Response
      */
     public function show(UserType $userType)
@@ -50,7 +50,7 @@ class UserTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\UserType  $userType
+     * @param  \App\Model\UserType  $userType
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, UserType $userType)
@@ -63,7 +63,7 @@ class UserTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\UserType  $userType
+     * @param  \App\Model\UserType  $userType
      * @return \Illuminate\Http\Response
      */
     public function destroy(UserType $userType)

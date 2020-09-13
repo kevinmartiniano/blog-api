@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
-use App\Comment;
-use App\User;
-use App\Post;
+use App\Model\Comment;
+use App\Model\User;
+use App\Model\Post;
 
 $factory->define(Comment::class, function (Faker $faker) {
     return [

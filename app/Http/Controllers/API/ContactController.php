@@ -5,8 +5,8 @@ namespace App\Http\Controllers\API;
 use Illuminate\Support\Facades\Mail;
 
 use App\Mail\ContactMe;
-use App\Contact;
-use App\User;
+use App\Model\Contact;
+use App\Model\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -45,7 +45,7 @@ class ContactController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Contact  $contact
+     * @param  \App\Model\Contact  $contact
      * @return \Illuminate\Http\Response
      */
     public function show(Contact $contact)
@@ -59,7 +59,7 @@ class ContactController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Contact  $contact
+     * @param  \App\Model\Contact  $contact
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Contact $contact)
@@ -72,7 +72,7 @@ class ContactController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Contact  $contact
+     * @param  \App\Model\Contact  $contact
      * @return \Illuminate\Http\Response
      */
     public function destroy(Contact $contact)

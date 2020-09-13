@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\Comment;
-use App\Contact;
-use App\Like;
-use App\Post;
-use App\User;
+use App\Model\Comment;
+use App\Model\Contact;
+use App\Model\Like;
+use App\Model\Post;
+use App\Model\User;
 
 use App\Policies\CommentPolicy;
 use App\Policies\ContactPolicy;
