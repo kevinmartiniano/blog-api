@@ -3,18 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Model\User;
+use App\Repositories\UserRepositoryInterface as UserRepository;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    private $userRepository;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserRepository $userRepository)
     {
         $this->middleware('auth')->except(['show']);
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -24,7 +29,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('layouts.pages.user_list', ['users' => User::all()]);
+        return view('layouts.pages.user_list', ['users' => $this->userRepository->findAll()]);
     }
 
     /**
@@ -35,6 +40,6 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('layouts.pages.user_detail', ['user' => $user]);
+        return view('layouts.pages.user_detail', ['user' => $this->userRepositor->find($user)]);
     }
 }
