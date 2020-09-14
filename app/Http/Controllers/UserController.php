@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\User;
-use App\Repositories\UserRepositoryInterface as UserRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -19,6 +19,7 @@ class UserController extends Controller
     public function __construct(UserRepository $userRepository)
     {
         $this->middleware('auth')->except(['show']);
+
         $this->userRepository = $userRepository;
     }
 
