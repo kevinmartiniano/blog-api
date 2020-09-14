@@ -3,18 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Model\Post;
+use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+
+    private $postRepository;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(PostRepository $postRepository)
     {
-        // $this->middleware('auth');
+        $this->postRepository = $postRepository;
     }
 
     /**
@@ -24,6 +28,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('layouts.pages.home', ['posts' => Post::orderBy('created_at', 'desc')->paginate()]);
+        return view('layouts.pages.home', ['posts' => $this->postRepository->findAll()]);
     }
 }

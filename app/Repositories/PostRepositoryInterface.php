@@ -9,5 +9,5 @@ interface PostRepositoryInterface
 {
     public function find(Post $post): ?Post;
 
-    public function findAll(): ?Collection;
+    public function findAll(): ?object;
 }

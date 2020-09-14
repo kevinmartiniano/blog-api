@@ -20,8 +20,8 @@ class PostRepository implements PostRepositoryInterface
         return $this->model->find($post->id);
     }
 
-    public function findAll(): ?Collection
+    public function findAll(): ?object
     {
-        return $this->model->all()->orderBy('created_at', 'desc')->paginate();
+        return $this->model::orderBy('created_at', 'desc')->paginate();
     }
 }
