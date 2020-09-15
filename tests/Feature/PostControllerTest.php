@@ -61,7 +61,7 @@ class PostControllerTest extends TestCase
         ]);
     }
 
-    public function testCreateNewPostInApiExpectingUnauthorized()
+    public function testCreateNewPostInApiExpectingSuccess()
     {
 
         $faker = Factory::create("pt_BR");
