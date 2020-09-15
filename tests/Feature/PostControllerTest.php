@@ -63,7 +63,6 @@ class PostControllerTest extends TestCase
 
     public function testCreateNewPostInApiExpectingSuccess()
     {
-
         $faker = Factory::create("pt_BR");
 
         $email = $faker->email;
@@ -115,5 +114,30 @@ class PostControllerTest extends TestCase
         $response = $this->post('/api/v1/posts/', $data, $headers);
 
         // TODO: Corrigir teste e adicionar assert do status da resposta.
+    }
+
+    public function testCreateNewPostInApiExpectingRedirect()
+    {
+        $faker = Factory::create("pt_BR");
+
+        $data = [
+            "title"        => $faker->title,
+            "subtitle"     => $faker->text(20),
+            "content"      => $faker->text(255),
+            "created_id"   => 1,
+            "modified_id"  => 1,
+            "created_at"   => $faker->date('Y-m-d'),
+            "updated_at"   => $faker->date('Y-m-d'),
+        ];
+
+        $headers = [
+            "headers" => [
+                "Content-Type" => "application/json",
+            ]
+        ];
+
+        $response = $this->post('/api/v1/posts/', $data, $headers);
+
+        $response->assertStatus(302);
     }
 }
