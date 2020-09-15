@@ -67,26 +67,27 @@ class PostControllerTest extends TestCase
         $faker = Factory::create("pt_BR");
 
         $email = $faker->email;
-        $password = $faker->password(7);
+        $password = $faker->password(8);
 
         $userData = [
             "email" => $email,
             "password" => bcrypt($password)
         ];
         
-        // create user
         $user = factory(User::class)->create($userData);
 
-        $client = DB::table("oauth_clients")->where("password_client", 1)->get();
-
-        $responseLogin = $this->post('/oauth/token', [
+        $client = DB::table("oauth_clients")->where("password_client", 1)->first();
+        
+        $dataLogin = [
             'grant_type' => 'password',
-            'client_id' => $client[0]->id,
-            'client_secret' => $client[0]->secret,
+            'client_id' => $client->id,
+            'client_secret' => $client->secret,
             'username' => $email,
             'password' => $password,
             'scope' => ''
-        ])->assertJsonStructure([
+        ];
+
+        $responseLogin = $this->post('/oauth/token', $dataLogin)->assertJsonStructure([
             "access_token",
             "refresh_token"
         ]);
@@ -111,12 +112,7 @@ class PostControllerTest extends TestCase
             ]
         ];
 
-        $response = $this->post('/api/v1/posts/', $data, [
-            'headers' => [
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer '.$login->access_token,
-            ],
-        ]);
+        $response = $this->post('/api/v1/posts/', $data, $headers);
 
         // TODO: Corrigir teste e adicionar assert do status da resposta.
     }
