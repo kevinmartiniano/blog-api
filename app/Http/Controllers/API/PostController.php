@@ -5,11 +5,19 @@ namespace App\Http\Controllers\API;
 use App\Model\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\PostRepository;
+use Exception;
 
 class PostController extends Controller
 {
-    public function __construct() {
+
+    private $postRepository;
+
+    public function __construct(PostRepository $postRepository)
+    {
         $this->middleware('auth:api')->except(['index', 'show']);
+
+        $this->postRepository = $postRepository;
     }
     /**
      * Display a listing of the resource.
@@ -18,7 +26,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::all();
+        return $this->postRepository->findAll();
     }
 
     /**
@@ -30,6 +38,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Post::class);
+
         return Post::create($request->all());
     }
 
@@ -56,6 +65,7 @@ class PostController extends Controller
         $this->authorize('update', $post);
 
         $post->update($request->all());
+
         return $post;
     }
 
@@ -68,6 +78,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $this->authorize('delete', $post);
+
         $post->delete();
     }
 }
